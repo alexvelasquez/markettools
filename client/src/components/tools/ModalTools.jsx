@@ -12,7 +12,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 const useStyles = makeStyles((theme) => ({
   button:{
     marginBottom:12,
-    marginRight: 2
 
   },
   paper: {
@@ -42,9 +41,9 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
 
   return (
 
-    <div>    
+    <div>
     <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpen()}>
-      Nuevo Herramienta
+      Nueva Herramienta
     </Button>
       <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Nueva Herramienta</DialogTitle>

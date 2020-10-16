@@ -7,8 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
+
 const useStyles = makeStyles((theme) => ({
   button:{
     marginBottom:12,
@@ -28,29 +27,29 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ModalCategory({category,openCategory,onCloseCategory,onOpenCategory}) {
+export default function ModalCategory() {
 
   const classes = useStyles();
-  const defaultCategory = {nameCategory:''};
-  const handleOpenCategory = () => {
-    onOpenCategory(true,defaultCategory);
+  const [open, setOpen] = React.useState(false);
+  const category = {name:''};
+  const handleClickOpen = () => {
+    setOpen(true);
   };
-  const handleCloseCategory = () => {
-     onCloseCategory(false);
+  const handleClose = () => {
+    setOpen(false);
   };
-
   return (
 
     <div>
-    <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpenCategory()}>
+    <Button variant="contained" color="primary" className={classes.button} onClick={handleClickOpen}>
       Nueva categoria
     </Button>
-    
-      <Dialog  open={openCategory} onClose={handleCloseCategory} aria-labelledby="form-dialog-title">
+
+      <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Nueva Categoria</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-             <Grid item sm={12} md={6}>
+             <Grid item sm={12}>
                <TextField
                  autoFocus
                  margin="dense"
@@ -63,15 +62,15 @@ export default function ModalCategory({category,openCategory,onCloseCategory,onO
                  type="text"
                  fullWidth
                />
-             </Grid>            
-              
+             </Grid>
+
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseCategory} color="primary">
+          <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleCloseCategory} color="primary">
+          <Button onClick={handleClose} color="primary">
             Agregar
           </Button>
         </DialogActions>

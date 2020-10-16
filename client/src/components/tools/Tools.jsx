@@ -45,30 +45,21 @@ export default function Tools() {
   const classes = useStyles();
 
   const [tool, setTool] = React.useState({name:'',dateModif:'',price:'',category:''});
-  const [category, setCategory] = React.useState({nameCategory:''});
 
   const [open, setOpen] = React.useState(false);
-  const [openCategory, setOpenCategory] = React.useState(false);
+
 
   const openModal = (value,item) =>{
     setOpen(value)
-    setTool(item)     
+    setTool(item)
   }
 
-  const openModalCategory = (value,item) =>{
-    setOpenCategory(value)     
-    setCategory(item)
-  }
 
   const closeModal = (value) =>{
     setOpen(value)
-    setTool({name:'',dateModif:'',price:'',category:''})    
+    setTool({name:'',dateModif:'',price:'',category:''})
   }
 
-  const closeModalCategory = (value) =>{
-    setOpenCategory(value)    
-    setCategory({nameCategory:''})
-  }
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -89,11 +80,17 @@ export default function Tools() {
       </Link>
       <Typography color="textPrimary">Herramientas</Typography>
     </Breadcrumbs>
-    <Grid container>
-       <Grid item sm={12} align="right">
-            <ModalTools tool={tool} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
-            <ModalCategory category={category} open={openCategory} onClose={closeModalCategory} onOpen={openModalCategory}></ModalCategory>
-        </Grid>        
+    <Grid container  direction="row" justify="flex-end" spacing={0}>
+      <Grid item xs={5} >
+        <Grid container direction="row"  spacing={0}>
+        <Grid item xs={6}>
+          <ModalTools tool={tool} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
+        </Grid>
+        <Grid item xs={6}>
+          <ModalCategory></ModalCategory>
+        </Grid>
+        </Grid>
+      </Grid>
     </Grid>
     <TableContainer component={Paper}>
      <Table className={classes.table} aria-label="simple table">
