@@ -28,14 +28,14 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
      onClose(false);
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     getClient()
     },[])
 
     console.log('A ver el State de CLientes', all_client)
 
   return (
-    
+
 
     <div>
     <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpen()}>
@@ -50,7 +50,7 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
                  autoFocus
                  margin="dense"
                  id="name"
-                 value={customer.name}
+                 defaultValue={customer.name}
                  label="Nombre/s(*)"
                  InputLabelProps={{
                     shrink: true,
@@ -62,7 +62,7 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
              <Grid item sm={12} md={4}>
                <TextField
                  autoFocus
-                 value={customer.lastname}
+                 defaultValue={customer.lastname}
                  margin="dense"
                  id="lastname"
                  label="Apellido/s(*)"
@@ -76,7 +76,7 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
              <Grid item sm={12} md={4}>
                <TextField
                  autoFocus
-                 value={customer.dni}
+                 defaultValue={customer.dni}
                  margin="dense"
                  id="dni"
                  label="Dni(*)"
@@ -90,7 +90,7 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
              <Grid item sm={12} md={4}>
              <TextField
                autoFocus
-               value={customer.email}
+               defaultValue={customer.email}
                margin="dense"
                id="email"
                label="Email(*)"
@@ -104,7 +104,7 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
              <Grid item sm={12} md={4}>
              <TextField
                autoFocus
-               value={customer.adress}
+               defaultValue={customer.adress}
                margin="dense"
                id="adress"
                label="Dirección(*)"
@@ -118,7 +118,7 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
              <Grid item sm={12} md={4}>
              <TextField
                autoFocus
-               value={customer.phone}
+               defaultValue={customer.phone}
                margin="dense"
                id="phone"
                label="Teléfono(*)"
@@ -145,19 +145,19 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
 }
 
 const mapDispatchToProps = dispatch => {
-  
-  return {      
+
+  return {
     getClient: () => dispatch(getClient()),
-     
+
   }
   }
-  
+
   const mapStateToProps = state => {
     return {
       all_client: state.all_client,
-         
-         
+
+
     }
   }
-  
+
   export default connect(mapStateToProps, mapDispatchToProps)(ModalCustomers)
