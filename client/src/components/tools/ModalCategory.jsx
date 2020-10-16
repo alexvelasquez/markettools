@@ -54,7 +54,7 @@ export default function ModalCategory() {
                  autoFocus
                  margin="dense"
                  id="nameCategory"
-                 value={category.name}
+                 defaultValue={category.name}
                  label="Descripción(*)"
                  InputLabelProps={{
                     shrink: true,

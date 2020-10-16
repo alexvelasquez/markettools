@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ModalTools({tool,open,onClose,onOpen}) {
   const classes = useStyles();
-  const defaultTool = {name:'',price:'',category:''};
+  var  defaultTool = {name:'',price:'',category:''};
   const handleOpen = () => {
      onOpen(true,defaultTool);
   };
@@ -53,8 +53,8 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
                <TextField
                  autoFocus
                  margin="dense"
+                 defaultValue={tool.name}
                  id="name"
-                 value={tool.name}
                  label="Descripción(*)"
                  InputLabelProps={{
                     shrink: true,
@@ -66,11 +66,11 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
 
              <Grid item sm={12} md={6}>
                <TextField
-                 value={tool.price}
                  margin="dense"
                  id="dni"
                  label="Precio(*)"
                  type="number"
+                 defaultValue={tool.price}
                  InputLabelProps={{
                     shrink: true,
                   }}
@@ -82,8 +82,8 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
              <TextField
              id="categoria"
              label="Categoria(*)"
-             value=""
              select
+             defaultValue={tool.categoria}
              fullWidth
              InputLabelProps={{
                 shrink: true,
