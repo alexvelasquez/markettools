@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   paper: { minWidth: "500px" },
 });
 
-const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) => {
+const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
   const classes = useStyles();
   const defaultCustomer = {name:'',dni:'',phone:'',email:'',adress:''};
   const handleOpen = () => {
@@ -44,92 +44,97 @@ const ModalCustomers = ({customer,open,onClose,onOpen, getClient, all_client}) =
       <Dialog fullWidth={true} maxWidth={'md'} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Nuevo Cliente</DialogTitle>
         <DialogContent>
-          <Grid container spacing={4}>
-             <Grid item sm={12} md={4}>
-               <TextField
-                 autoFocus
-                 margin="dense"
-                 id="name"
-                 defaultValue={customer.name}
-                 label="Nombre/s(*)"
-                 InputLabelProps={{
-                    shrink: true,
-                  }}
-                 type="text"
-                 fullWidth
-               />
-             </Grid>
-             <Grid item sm={12} md={4}>
-               <TextField
-                 autoFocus
-                 defaultValue={customer.lastname}
-                 margin="dense"
-                 id="lastname"
-                 label="Apellido/s(*)"
-                 InputLabelProps={{
-                    shrink: true,
-                  }}
-                 type="text"
-                 fullWidth
-               />
-             </Grid>
-             <Grid item sm={12} md={4}>
-               <TextField
-                 autoFocus
-                 defaultValue={customer.dni}
-                 margin="dense"
-                 id="dni"
-                 label="Dni(*)"
-                 type="number"
-                 InputLabelProps={{
-                    shrink: true,
-                  }}
-                   fullWidth
-               />
-             </Grid>
-             <Grid item sm={12} md={4}>
-             <TextField
-               autoFocus
-               defaultValue={customer.email}
-               margin="dense"
-               id="email"
-               label="Email(*)"
-               type="email"
-               InputLabelProps={{
-                  shrink: true,
-                }}
-                 fullWidth
-             />
-             </Grid>
-             <Grid item sm={12} md={4}>
-             <TextField
-               autoFocus
-               defaultValue={customer.adress}
-               margin="dense"
-               id="adress"
-               label="Dirección(*)"
-               type="text"
-               InputLabelProps={{
-                  shrink: true,
-                }}
-                 fullWidth
-             />
-             </Grid>
-             <Grid item sm={12} md={4}>
-             <TextField
-               autoFocus
-               defaultValue={customer.phone}
-               margin="dense"
-               id="phone"
-               label="Teléfono(*)"
-               type="number"
-               InputLabelProps={{
-                  shrink: true,
-                }}
-                 fullWidth
-             />
-             </Grid>
-          </Grid>
+          {all_client ? all_client.map(customer => {
+            return (
+              <Grid container spacing={4}>
+                 <Grid item sm={12} md={4}>
+                   <TextField
+                     autoFocus
+                     margin="dense"
+                     id="name"
+                     defaultValue={customer.name}
+                     label="Nombre/s(*)"
+                     InputLabelProps={{
+                        shrink: true,
+                      }}
+                     type="text"
+                     fullWidth
+                   />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                   <TextField
+                     autoFocus
+                     defaultValue={customer.lastname}
+                     margin="dense"
+                     id="lastname"
+                     label="Apellido/s(*)"
+                     InputLabelProps={{
+                        shrink: true,
+                      }}
+                     type="text"
+                     fullWidth
+                   />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                   <TextField
+                     autoFocus
+                     defaultValue={customer.dni}
+                     margin="dense"
+                     id="dni"
+                     label="Dni(*)"
+                     type="number"
+                     InputLabelProps={{
+                        shrink: true,
+                      }}
+                       fullWidth
+                   />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                 <TextField
+                   autoFocus
+                   defaultValue={customer.email}
+                   margin="dense"
+                   id="email"
+                   label="Email(*)"
+                   type="email"
+                   InputLabelProps={{
+                      shrink: true,
+                    }}
+                     fullWidth
+                 />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                 <TextField
+                   autoFocus
+                   defaultValue={customer.adress}
+                   margin="dense"
+                   id="adress"
+                   label="Dirección(*)"
+                   type="text"
+                   InputLabelProps={{
+                      shrink: true,
+                    }}
+                     fullWidth
+                 />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                 <TextField
+                   autoFocus
+                   defaultValue={customer.phone}
+                   margin="dense"
+                   id="phone"
+                   label="Teléfono(*)"
+                   type="number"
+                   InputLabelProps={{
+                      shrink: true,
+                    }}
+                     fullWidth
+                 />
+                 </Grid>
+              </Grid>
+          )})
+          : "Aún no hay clientes."
+                  }
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -148,15 +153,12 @@ const mapDispatchToProps = dispatch => {
 
   return {
     getClient: () => dispatch(getClient()),
-
   }
   }
 
   const mapStateToProps = state => {
     return {
       all_client: state.all_client,
-
-
     }
   }
 

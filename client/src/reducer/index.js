@@ -1,4 +1,5 @@
-import axios from "axios";
+// import axios from "axios";
+
 import {
     PRUEBA_API,
     ALL_CLIENT
@@ -8,10 +9,9 @@ import {
 const initialState = {
   info_movie: [],
   all_client: []
-
-  
-   
 };
+
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case PRUEBA_API:
@@ -22,15 +22,11 @@ const reducer = (state = initialState, action) => {
       case ALL_CLIENT:
       return {
         ...state,
-        info_movie: action.payload,
+        all_client: action.payload,
       };
-    
-
     default:
       return state;
   }
-};////
-
- 
+}; 
 
 export default reducer;

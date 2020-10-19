@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -20,6 +20,9 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { getClient } from '../../actions/index';
+import { connect } from 'react-redux';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -32,27 +35,30 @@ const useStyles = makeStyles({
   }
 });
 
-const customers = [
-  { name:'Carlos',lastname:'Bilardo',dni:'38192012',phone:'02214914585', email:'carlosbilardo@gmail.com', adress:'Calle 1 y 57'},
-  { name:'Diego Armando',lastname:'Maradona',dni:'38192012',phone:'02214914585',email:'diegomaradona@gmail.com',adress:'Avenida 60 y 118'},
-  { name:'Lionel',lastname:'Messi' ,dni:'38192012',phone:'02214914585', email:'carlosbilardo@gmail.com', adress:'Calle 1 y 57'},
-  { name:'Ricardo', lastname:'Fort',dni:'38192012',phone:'02214914585',email:'diegomaradona@gmail.com',adress:'Avenida 60 y 118'},
-  { name:'Alejandro',lastname:'Fantino',dni:'38192012',phone:'02214914585', email:'carlosbilardo@gmail.com', adress:'Calle 1 y 57'},
-  { name:'Ricardo',lastname:'Darin',dni:'38192012',phone:'0221-4914585',email:'diegomaradona@gmail.com',adress:'Avenida 60 y 118'},];
-export default function Customers() {
+// const customers = [
+//   { name:'Carlos',lastname:'Bilardo',dni:'38192012',phone:'02214914585', email:'carlosbilardo@gmail.com', adress:'Calle 1 y 57'},
+//   { name:'Diego Armando',lastname:'Maradona',dni:'38192012',phone:'02214914585',email:'diegomaradona@gmail.com',adress:'Avenida 60 y 118'},
+//   { name:'Lionel',lastname:'Messi' ,dni:'38192012',phone:'02214914585', email:'carlosbilardo@gmail.com', adress:'Calle 1 y 57'},
+//   { name:'Ricardo', lastname:'Fort',dni:'38192012',phone:'02214914585',email:'diegomaradona@gmail.com',adress:'Avenida 60 y 118'},
+//   { name:'Alejandro',lastname:'Fantino',dni:'38192012',phone:'02214914585', email:'carlosbilardo@gmail.com', adress:'Calle 1 y 57'},
+//   { name:'Ricardo',lastname:'Darin',dni:'38192012',phone:'0221-4914585',email:'diegomaradona@gmail.com',adress:'Avenida 60 y 118'},];
+function Customers({ getClient, all_client }) {
   const classes = useStyles();
 
-  const [customer, setCustomer] = React.useState({name:'',dni:'',phone:'',email:'',adress:''});
+  useEffect(() => {
+    getClient()
+    },[])
+
   const [open, setOpen] = React.useState(false);
 
   const openModal = (value,item) =>{
 
     setOpen(value)
-    setCustomer(item)
+    getClient(item)
   }
   const closeModal = (value) =>{
     setOpen(value)
-    setCustomer({name:'',dni:'',phone:'',email:'',adress:''})
+    getClient({name:'',dni:'',phone:'',email:'',adress:''})
   }
 
   // pagination
@@ -79,7 +85,7 @@ export default function Customers() {
     </Breadcrumbs>
     <Grid container>
        <Grid item sm={12} align="right">
-        <ModalCustomers customer={customer} open={open} onClose={closeModal} onOpen={openModal}></ModalCustomers>
+        <ModalCustomers customer={all_client} open={open} onClose={closeModal} onOpen={openModal}></ModalCustomers>
         </Grid>
     </Grid>
     <TableContainer component={Paper}>
@@ -95,8 +101,9 @@ export default function Customers() {
          </TableRow>
        </TableHead>
        <TableBody>
-         {customers.map((row) => (
+       {all_client ? all_client.map((row) => (
            <TableRow key={row.name}>
+             {console.log("esto es row", row)}
              <TableCell component="th" scope="row">
                {row.name} {row.lastname}
              </TableCell>
@@ -113,14 +120,15 @@ export default function Customers() {
              </IconButton>
              </TableCell>
            </TableRow>
-         ))}
+         )): "Aún no hay clientes."
+         }
        </TableBody>
      </Table>
    </TableContainer>
    <TablePagination
      rowsPerPageOptions={[5, 10, 25]}
      component="div"
-     count={customers.length}
+     count={all_client.length}
      rowsPerPage={rowsPerPage}
      page={page}
      onChangePage={handleChangePage}
@@ -128,3 +136,17 @@ export default function Customers() {
    />
     </div>
   )}
+
+  const mapDispatchToProps = dispatch => {
+    return {
+      getClient: () => dispatch(getClient()),
+    }
+  }
+
+    const mapStateToProps = state => {
+      return {
+        all_client: state.all_client,
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Customers)
