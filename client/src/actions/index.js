@@ -6,7 +6,7 @@ export const ADD_CLIENT = "ADD_CLIENT";
 export const CARGA_DB = "CARGA_DB";
 export const ALL_CLIENT = "ALL_CLIENT";
 export const GET_TOOL = "GET_TOOL";
-export const GET_ALL_TOOLS = "GET_ ALL_TOOLS"
+export const GET_ALL_TOOLS = "GET_ALL_TOOLS"
 
 
 export function infoMovie (apiKey, ciudad ) {

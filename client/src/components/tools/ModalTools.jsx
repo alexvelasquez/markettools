@@ -9,6 +9,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
+
+import { getAllTools } from '../../actions/index';
+import { connect } from  'react-redux';
+
 const useStyles = makeStyles((theme) => ({
   button:{
     marginBottom:12,
@@ -29,11 +33,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ModalTools({tool,open,onClose,onOpen}) {
+function ModalTools({ all_tools, open, onClose, onOpen }) {
   const classes = useStyles();
-  var  defaultTool = {name:'',price:'',category:''};
+
   const handleOpen = () => {
-     onOpen(true,defaultTool);
+     onOpen(true, all_tools);
   };
   const handleClose = () => {
      onClose(false);
@@ -53,7 +57,7 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
                <TextField
                  autoFocus
                  margin="dense"
-                 defaultValue={tool.name}
+                 value={all_tools.name}
                  id="name"
                  label="Descripción(*)"
                  InputLabelProps={{
@@ -70,7 +74,7 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
                  id="dni"
                  label="Precio(*)"
                  type="number"
-                 defaultValue={tool.price}
+                 value={all_tools.price}
                  InputLabelProps={{
                     shrink: true,
                   }}
@@ -83,7 +87,7 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
              id="categoria"
              label="Categoria(*)"
              select
-             defaultValue={tool.categoria}
+             value={all_tools.categoria}
              fullWidth
              InputLabelProps={{
                 shrink: true,
@@ -107,3 +111,17 @@ export default function ModalTools({tool,open,onClose,onOpen}) {
     </div>
   );
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllTools: () => dispatch(getAllTools()),
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    all_tools: state.all_tools,
+}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalTools);
