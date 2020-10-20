@@ -111,7 +111,8 @@ export default function Tools() {
              </TableCell>
              <TableCell align="center">{row.dateModif}</TableCell>
              <TableCell align="center">{row.price}</TableCell>
-             <TableCell align="center">{row.category}</TableCell>
+             <TableCell align="center">{row.categoryId}             
+             </TableCell>
              <TableCell align="center">
              <IconButton aria-label="edit" onClick={()=>openModal(true,row)}>
                <EditIcon />

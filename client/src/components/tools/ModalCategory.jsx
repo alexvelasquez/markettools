@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -7,6 +7,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import { connect } from "react-redux";
+import { insertCategory} from "../../actions/index";
 
 const useStyles = makeStyles((theme) => ({
   button:{
@@ -27,7 +30,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ModalCategory() {
+const ModalCategory = ({insertCategory}) =>{
+
+  const [inputCategory, setInputCategori] = useState({ nameCategory: ''});
+  
+  const handleChangeCategory = function(e) {
+    setInputCategori({
+    ...inputCategory,
+    [e.target.name]: e.target.value
+   });
+  }
+
+  console.log(inputCategory)
+  
+  const handleSubmit = function(e){
+    e.preventDefault();    
+    insertCategory(inputCategory)    
+     
+  }
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -41,40 +61,62 @@ export default function ModalCategory() {
   return (
 
     <div>
+     
     <Button variant="contained" color="primary" className={classes.button} onClick={handleClickOpen}>
       Nueva categoria
-    </Button>
-
-      <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+    </Button>    
+      <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">      
         <DialogTitle id="form-dialog-title">Nueva Categoria</DialogTitle>
+        <form onSubmit={handleSubmit}>
         <DialogContent>
           <Grid container spacing={2}>
-             <Grid item sm={12}>
+             <Grid item sm={12}>              
                <TextField
                  autoFocus
                  margin="dense"
                  id="nameCategory"
-                 defaultValue={category.name}
+                 name="nameCategory"                  
                  label="Descripción(*)"
                  InputLabelProps={{
                     shrink: true,
                   }}
                  type="text"
                  fullWidth
-               />
+                 onChange={handleChangeCategory}                  
+               />               
              </Grid>
-
           </Grid>
-        </DialogContent>
-        <DialogActions>
+          <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button type="submit" onClick={handleClose} color="primary">
             Agregar
-          </Button>
-        </DialogActions>
+          </Button>          
+        </DialogActions>          
+        </DialogContent>
+        </form>
+        
       </Dialog>
+      
     </div>
   );
 }
+
+const mapDispatchToProps = dispatch => {
+  
+  return {      
+    insertCategory: (inputCategory) => dispatch(insertCategory(inputCategory))
+     
+  }
+  }
+  
+  const mapStateToProps = state => {
+    return {
+        date_user: state.date_user
+         
+         
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(ModalCategory)

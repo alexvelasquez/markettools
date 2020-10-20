@@ -7,6 +7,7 @@ export const CARGA_DB = "CARGA_DB";
 export const ALL_CLIENT = "ALL_CLIENT";
 export const GET_TOOL = "GET_TOOL";
 export const GET_ALL_TOOLS = "GET_ ALL_TOOLS"
+export const INSERT_CATEGORY = "INSERT_CATEGORY"
 
 
 export function infoMovie (apiKey, ciudad ) {
@@ -91,4 +92,18 @@ export function addClient(payload) {
     type: "ADD_CLIENT",
     payload
   }
+}
+export function insertCategory (date ) {
+  console.log('EL insert llega ', date )
+  return function(dispatch) {
+    return axios.post(`http://localhost:3005/tools/insertCategory`,date)
+      .then(result => result.data)
+      .then(data => {
+        dispatch({
+          type: INSERT_CATEGORY,
+          payload: data
+        })
+        console.log("El insert category devuelve ",data)
+      })
+  };
 }
