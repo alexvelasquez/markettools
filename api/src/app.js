@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 
-const { Client } = require('./db.js');
+const { Client, Tools } = require('./db.js');
 
 const server = express();
 
@@ -115,6 +115,37 @@ Client.create(client7)
 
 Client.create(client8)
 res.send('Ok!')
+})
+
+//HARCODEANDO TOOLS
+
+server.post('/toolhd', (req, res) => {
+  
+  const tool1 = {
+    name: "Martillo",
+    stock: 43
+  }
+  Tools.create(tool1);
+
+  const tool2 = {
+    name: "Trompito",
+    stock: 35
+  }
+  Tools.create(tool2);
+
+  const tool3 = {
+    name: "Andamios",
+    stock: 82
+  }
+  Tools.create(tool3)
+
+  const tool4 = {
+    name: "Amoladora",
+    stock: 10
+  }
+  Tools.create(tool4);
+
+  res.send('Tools creadas en db')
 })
 
 module.exports = server;

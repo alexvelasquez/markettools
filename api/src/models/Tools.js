@@ -5,12 +5,12 @@ module.exports = (sequelize) => {
   // defino el modelo
   const Tools = sequelize.define('tools', {
     name: {
-            type: DataTypes.STRING,
-            allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: true,
         },
     description: {
-            type: DataTypes.STRING,
-            allowNull: true,
+      type: DataTypes.STRING,
+      // allowNull: true,
         },
     stock: {
       type: DataTypes.INTEGER,
@@ -18,7 +18,7 @@ module.exports = (sequelize) => {
     },
     status: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
   });
 };

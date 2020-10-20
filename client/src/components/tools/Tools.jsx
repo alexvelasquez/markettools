@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -21,6 +21,9 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { getAllTools } from '../../actions/index';
+import { connect } from 'react-redux';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -33,21 +36,23 @@ const useStyles = makeStyles({
   }
 });
 
-const tools = [
-  { name:'Martillo',dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
-  { name:'Taladro',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
-  { name:'Destornillador' ,dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
-  { name:'Tornillos',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
-  { name:'Serrucho',dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
-  { name:'Cinta',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
-];
-export default function Tools() {
+// const tools = [
+//   { name:'Martillo',dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
+//   { name:'Taladro',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
+//   { name:'Destornillador' ,dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
+//   { name:'Tornillos',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
+//   { name:'Serrucho',dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
+//   { name:'Cinta',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
+// ];
+function Tools({ getAllTools, all_tools }) {
   const classes = useStyles();
 
   const [tool, setTool] = React.useState({name:'',dateModif:'',price:'',category:''});
-
   const [open, setOpen] = React.useState(false);
 
+  useEffect(() => {
+    getAllTools()
+    },[])
 
   const openModal = (value,item) =>{
     setOpen(value)
@@ -84,7 +89,7 @@ export default function Tools() {
       <Grid item xs={5} >
         <Grid container direction="row"  spacing={0}>
         <Grid item xs={6}>
-          <ModalTools tool={tool} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
+          <ModalTools tool={all_tools} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
         </Grid>
         <Grid item xs={6}>
           <ModalCategory></ModalCategory>
@@ -104,7 +109,7 @@ export default function Tools() {
          </TableRow>
        </TableHead>
        <TableBody>
-         {tools.map((row) => (
+         {all_tools ? all_tools.map((row) => (
            <TableRow key={row.name}>
              <TableCell component="th" scope="row">
                {row.name}
@@ -122,14 +127,14 @@ export default function Tools() {
              </IconButton>
              </TableCell>
            </TableRow>
-         ))}
+         )): "No se han encontrado herramientas."}
        </TableBody>
      </Table>
    </TableContainer>
    <TablePagination
      rowsPerPageOptions={[5, 10, 25]}
      component="div"
-     count={tools.length}
+     count={all_tools.length}
      rowsPerPage={rowsPerPage}
      page={page}
      onChangePage={handleChangePage}
@@ -137,3 +142,17 @@ export default function Tools() {
    />
     </div>
   )}
+
+  const mapDispatchToProps = dispatch => {
+    return {
+      getAllTools: () => dispatch(getAllTools()),
+    }
+  }
+
+  const mapStateToProps = state => {
+    return {
+      all_tools: state.all_tools,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tools);
