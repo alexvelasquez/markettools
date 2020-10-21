@@ -3,7 +3,9 @@
 import {
     PRUEBA_API,
     ALL_CLIENT,
-    GET_ALL_TOOLS
+    GET_ALL_TOOLS,
+    //INSERT_CATEGORY
+
 } from "../actions/index";
 
 const initialState = {

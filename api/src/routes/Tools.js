@@ -1,10 +1,10 @@
 const server = require('express').Router();
 const e = require('express');
-const { Tools } = require('../db.js');
+const { Tools, Category } = require('../db.js');
 
 
 //**************************************
-//|                                    |
+//|                T O O L S           |
 //|                                    |
 //**************************************
 server.get('/', (req, res, next) => {
@@ -24,9 +24,32 @@ server.get('/:id', (req, res, next) => {
     .catch(next)
 }) 
 
-/* server.post('/', (req, res, next) => {
-    Tools.create(req.body)
-})
+server.post('/insertTools', (req, res, next) => {
+       
+      Tools.create(req.body)    
+      .then(date => {
+        res.send(date)
+    })
 
-server.post() */
+     
+  })
+
+
+//**************************************
+//|                CATRGORYES          |
+//|                                    |
+//**************************************
+server.post('/insertCategory', (req, res, next) => {
+
+    console.log(req.body)  
+    const {nameCategory} = req.body 
+    
+    Category.create({name: nameCategory})
+
+  .then(date => {
+      res.send(date)
+  })
+  })
+
+ 
 module.exports = server;
