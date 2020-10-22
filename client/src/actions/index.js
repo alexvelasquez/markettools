@@ -124,19 +124,19 @@ export function login(date) {
       console.log("Login devuelve", data)
     })
   }
+}
 
 export function insertTools (date ) {
   console.log('EL insertTOOLS llega ', date )
   return function(dispatch) {
-    return axios.post(`http://localhost:3005/tools/insertTools`,date)
-      .then(result => result.data)
-      .then(data => {
-        dispatch({
-          type: INSERT_TOOLS,
-          payload: data
-        })
-        console.log("El insert TOOLS devuelve ",data)
+  return axios.post(`http://localhost:3005/tools/insertTools`,date)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: INSERT_TOOLS,
+        payload: data
       })
-    }
+      console.log("El insert TOOLS devuelve ",data)
+    })
   }
 }
