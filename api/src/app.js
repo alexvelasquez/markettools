@@ -3,8 +3,11 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
+const LocalStrategy = require('passport-local').Strategy
+const session = require('express-session')
 
-const { Client, Tools, Category } = require('./db.js');
+const { Client, Tools, User, Category } = require('./db.js');
+const passport = require('passport');
 
 const server = express();
 
@@ -21,6 +24,48 @@ server.use((req, res, next) => {
   next();
 });
 
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log("este es el username", username)
+    console.log("este es el password", password)
+    User.findOne({ where: { username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Nombre de usuario incorrecto.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Contraseña incorrecta.' });
+      }
+      return done(null, user);
+    }});
+  }
+));
+
+// Esto permite que la información almacenada en la sesión sea lo más simple y pequeña posible
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// Al deserealizar la información del usuario va a quedar almacenada en req.user
+passport.deserializeUser((id, done) => {
+  console.log("ENTRA EL ID", id)
+  User.findByPk(id)
+  .then((user) => {
+    done(null, user.dataValues);
+  }).catch(err => {
+    return done(err);
+  })
+  });
+
+server.use(session({
+  secret: "secret",
+  resave: true,
+  saveUninitialized: true
+}));
+
+server.use(passport.initialize());
+server.use(passport.session());
+
 server.use('/', routes);
 
 // Error catching endware.
@@ -30,6 +75,42 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   console.error(err);
   res.status(status).send(message);
 });
+
+
+
+server.post('/login', (req, res) => {
+  //Recibir las credenciales e iniciar sesion.
+  passport.authenticate('local', {
+    successRedirect: "/",
+    failureRedirect: "/login"
+  })
+})
+
+function isAuthenticated(req, res, next) {
+  if(req.isAuthenticated()){
+    console.log("entre en el authenticated")
+    next();
+  }
+  else{
+    res.send(false);
+  }
+}
+
+server.get("/logout", (req, res) => {
+  req.logout();
+  res.status(200).send("Ok!")
+});
+
+server.get("/login", isAuthenticated, (req, res) => {
+  res.send(req.user)
+});
+
+
+
+
+
+
+//-------------------------------------------------------------------------------------------
 
 ///////// HARDCOD CLIENTES //////
 
@@ -156,6 +237,15 @@ res.send('Carga Ok! -> TOOLS, CLIENTS, CATEGORYS')
 })
 
 
+
+server.post("/loginhd", (req, res) => {
+  const user1 = {
+    username: "facundo94",
+    password: 1234
+  }
+  User.create(user1);
+  res.send(user1)
+})
 
 module.exports = server;
 

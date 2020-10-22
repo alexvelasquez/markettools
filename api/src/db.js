@@ -32,7 +32,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 //        RELACIONES        |||
 //|||||||||||||||||||||||||||||
 
-const { Client, Tools, Order, Category } = sequelize.models;
+const { Client, Tools, Order, Category, User } = sequelize.models;
 
 Client.hasMany(Order);
 Order.belongsTo(Client);
@@ -42,8 +42,10 @@ Tools.belongsTo(Order);
 
 Tools.belongsTo(Category);
 
+// User.hasMany(Client);
+// Client.belongsTo(User)
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models, // para poder importar los modelos así: const { Client, Tools } = require('./db.js');
+  conn: sequelize,     // para importar la conexión { conn } = require('./db.js');
 };
