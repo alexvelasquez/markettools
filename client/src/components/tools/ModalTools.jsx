@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ModalTools({ all_tools, open, onClose, onOpen, insertTools }) {
+function ModalTools({ all_tools, open, onClose, onOpen, insertTools}) {
 
   const [inputTools, setInputTools] = useState({ name: '', description: "", stock: "", categoryId: ""});
   
@@ -48,8 +48,9 @@ function ModalTools({ all_tools, open, onClose, onOpen, insertTools }) {
   const handleSubmit = function(e){
     e.preventDefault();   
       
-    insertTools(inputTools) 
-    getAllTools()   
+    insertTools(inputTools);
+    getAllTools();    
+    
      
   }
 
@@ -160,13 +161,16 @@ function ModalTools({ all_tools, open, onClose, onOpen, insertTools }) {
 const mapDispatchToProps = dispatch => {
   return {
     getAllTools: () => dispatch(getAllTools()),
-    insertTools: (inputTools) => dispatch(insertTools(inputTools))
+    insertTools: (inputTools) => dispatch(insertTools(inputTools)),
+   
+   
   }
 }
 
 const mapStateToProps = state => {
   return {
-    all_tools: state.all_tools,
+    all_tools: state.all_tools
+     
 }
 }
 

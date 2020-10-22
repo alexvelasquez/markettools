@@ -21,7 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { getAllTools } from '../../actions/index';
+import { getAllTools, getAllCategory } from '../../actions/index';
 import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
@@ -35,16 +35,8 @@ const useStyles = makeStyles({
     marginBottom:12,
   }
 });
-
-// const tools = [
-//   { name:'Martillo',dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
-//   { name:'Taladro',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
-//   { name:'Destornillador' ,dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
-//   { name:'Tornillos',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
-//   { name:'Serrucho',dateModif:'19/09/2020', price:'198.20', category:'OTROS'},
-//   { name:'Cinta',dateModif:'19/09/2020',price:'2672.10',category:'OTROS'},
-// ];
-function Tools({ getAllTools, all_tools }) {
+ 
+function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
   const classes = useStyles();
  
 
@@ -52,7 +44,8 @@ function Tools({ getAllTools, all_tools }) {
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    getAllTools()
+    getAllTools();
+    getAllCategory();
     },[])
 
   const openModal = (value,item) =>{
@@ -76,6 +69,11 @@ function Tools({ getAllTools, all_tools }) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+    
+
+
+
   return (
     <div>
     <Toolbar />
@@ -117,7 +115,11 @@ function Tools({ getAllTools, all_tools }) {
              </TableCell>
              <TableCell align="center">{row.dateModif}</TableCell>
              <TableCell align="center">{row.stock}</TableCell>
-             <TableCell align="center">{row.categoryId}             
+             <TableCell align="center">{
+              all_categorys.map((cat)=>{                
+                  return cat.id === row.categoryId ? cat.name : '' 
+               }) 
+             }             
              </TableCell>
              <TableCell align="center">
              <IconButton aria-label="edit" onClick={()=>openModal(true,row)}>
@@ -147,12 +149,15 @@ function Tools({ getAllTools, all_tools }) {
   const mapDispatchToProps = dispatch => {
     return {
       getAllTools: () => dispatch(getAllTools()),
+      getAllCategory: () => dispatch(getAllCategory()) 
     }
   }
 
   const mapStateToProps = state => {
     return {
       all_tools: state.all_tools,
+      all_categorys: state.all_categorys
+
   }
 }
 

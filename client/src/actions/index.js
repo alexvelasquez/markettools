@@ -9,6 +9,7 @@ export const GET_TOOL = "GET_TOOL";
 export const GET_ALL_TOOLS = "GET_ALL_TOOLS";
 export const INSERT_CATEGORY = "INSERT_CATEGORY";
 export const INSERT_TOOLS = "INSERT_TOOLS";
+export const GET_ALL_CATEGORY = "GET_ALL_CATEGORY";
 
 
 export function infoMovie (apiKey, ciudad ) {
@@ -63,6 +64,20 @@ export function getAllTools() {
         payload: data
       })
       console.log("Todas las tools", data)
+    })
+  }
+}
+
+export function getAllCategory() {
+  return function(dispatch) {
+    return axios.get(`http://localhost:3005/category`)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: "GET_ALL_CATEGORY",
+        payload: data
+      })
+      console.log("Todas las CATEGORY", data)
     })
   }
 }

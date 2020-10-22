@@ -51,5 +51,13 @@ server.post('/insertCategory', (req, res, next) => {
   })
   })
 
+  server.get('/category', (req, res, next) => {
+    Category.findAll()
+    .then(categorys => {
+        res.send(categorys)
+    })
+    .catch(err => console.log(err))
+})
+
  
 module.exports = server;
