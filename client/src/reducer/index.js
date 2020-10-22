@@ -3,13 +3,15 @@
 import {
     PRUEBA_API,
     ALL_CLIENT,
-    GET_ALL_TOOLS
+    GET_ALL_TOOLS,
+    LOGIN
 } from "../actions/index";
 
 const initialState = {
   info_movie: [],
   all_client: [],
-  all_tools: []
+  all_tools: [],
+  users: []
 };
 
 
@@ -29,6 +31,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         all_tools: action.payload,
+      };
+      case LOGIN:
+      return {
+        ...state,
+        users: action.payload,
       };
     default:
       return state;

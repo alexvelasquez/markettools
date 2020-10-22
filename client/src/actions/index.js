@@ -6,23 +6,24 @@ export const ADD_CLIENT = "ADD_CLIENT";
 export const CARGA_DB = "CARGA_DB";
 export const ALL_CLIENT = "ALL_CLIENT";
 export const GET_TOOL = "GET_TOOL";
-export const GET_ALL_TOOLS = "GET_ALL_TOOLS"
-export const INSERT_CATEGORY = "INSERT_CATEGORY"
+export const GET_ALL_TOOLS = "GET_ALL_TOOLS";
+export const INSERT_CATEGORY = "INSERT_CATEGORY";
+export const LOGIN = "LOGIN";
 
 
-export function infoMovie (apiKey, ciudad ) {
-    return function(dispatch) {
-      return axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}`)
-        .then(result => result.data)
-        .then(data => {
-          dispatch({
-            type: PRUEBA_API,
-            payload: data
-          })
-          console.log("El Actions ",data)
-        })
-    };
-  }
+// export function infoMovie (apiKey, ciudad ) {
+//     return function(dispatch) {
+//       return axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}`)
+//         .then(result => result.data)
+//         .then(data => {
+//           dispatch({
+//             type: PRUEBA_API,
+//             payload: data
+//           })
+//           console.log("El Actions ",data)
+//         })
+//     };
+//   }
 
 export function cargardb () {
   return function(dispatch) {
@@ -93,8 +94,8 @@ export function addClient(payload) {
     payload
   }
 }
-export function insertCategory (date ) {
-  console.log('EL insert llega ', date )
+export function insertCategory (date) {
+  console.log('EL insert llega ', date)
   return function(dispatch) {
     return axios.post(`http://localhost:3005/tools/insertCategory`,date)
       .then(result => result.data)
@@ -106,4 +107,19 @@ export function insertCategory (date ) {
         console.log("El insert category devuelve ",data)
       })
   };
+}
+
+export function login(date) {
+  console.log("este date", date)
+  return function(dispatch) {
+    return axios.get(`http://localhost:3005/login`, date)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: LOGIN,
+        payload: data
+      })
+      console.log("Login devuelve", data)
+    })
+  }
 }
