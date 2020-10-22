@@ -9,6 +9,7 @@ export const GET_TOOL = "GET_TOOL";
 export const GET_ALL_TOOLS = "GET_ALL_TOOLS";
 export const INSERT_CATEGORY = "INSERT_CATEGORY";
 export const LOGIN = "LOGIN";
+export const INSERT_TOOLS = "INSERT_TOOLS";
 
 
 // export function infoMovie (apiKey, ciudad ) {
@@ -94,6 +95,7 @@ export function addClient(payload) {
     payload
   }
 }
+
 export function insertCategory (date) {
   console.log('EL insert llega ', date)
   return function(dispatch) {
@@ -121,5 +123,20 @@ export function login(date) {
       })
       console.log("Login devuelve", data)
     })
+  }
+
+export function insertTools (date ) {
+  console.log('EL insertTOOLS llega ', date )
+  return function(dispatch) {
+    return axios.post(`http://localhost:3005/tools/insertTools`,date)
+      .then(result => result.data)
+      .then(data => {
+        dispatch({
+          type: INSERT_TOOLS,
+          payload: data
+        })
+        console.log("El insert TOOLS devuelve ",data)
+      })
+    }
   }
 }

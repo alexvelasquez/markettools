@@ -10,6 +10,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import BuildIcon from '@material-ui/icons/Build';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
+ 
+import { cargardb } from '../../actions/index';
+import { connect } from 'react-redux';
+
+
 const drawerWidth = 210;
 
 const useStyles = makeStyles((theme) => ({
@@ -27,8 +32,13 @@ const useStyles = makeStyles((theme) => ({
 function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
   return <ListItem button component="a" {...props} />;
 }
-export default function ClippedDrawer() {
+function ClippedDrawer({cargardb}) {
   const classes = useStyles();
+
+  const loadDB = function(){
+    cargardb()
+
+  }
 
   return (
       <Drawer
@@ -59,8 +69,27 @@ export default function ClippedDrawer() {
               <ListItemText primary='Herramientas' />
             </ListItemLink>
           </List>
+          <List>
+            <ListItemLink>
+              <button onClick={loadDB}><small>cargadb</small></button>
+            </ListItemLink>
+          </List>
+          
         </div>
       </Drawer>
 
   );
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    cargardb: () => dispatch(cargardb()),
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    all_tools: state.all_tools,
+}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClippedDrawer);

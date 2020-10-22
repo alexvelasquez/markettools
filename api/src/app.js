@@ -6,7 +6,7 @@ const routes = require('./routes/index.js');
 const LocalStrategy = require('passport-local').Strategy
 const session = require('express-session')
 
-const { Client, Tools, User } = require('./db.js');
+const { Client, Tools, User, Category } = require('./db.js');
 const passport = require('passport');
 
 const server = express();
@@ -195,39 +195,48 @@ Client.create(client7)
   }
 
 Client.create(client8)
-res.send('Ok!')
+ 
+//////// carga CATEGORY //////
+ 
+Category.create({name: "CARPINTERIA"});
+Category.create({name: "HERRERIA"});
+Category.create({name: "ALBAÑILERIA"});
+Category.create({name: "ELECTRICIDAD"});
+Category.create({name: "OBRAS VARIAS"});
+ 
+//////// carga Tools //////
+const tool1 = {
+  name: "Martillo",
+  stock: 43,
+  categoryId: 1
+}
+Tools.create(tool1);
+
+const tool2 = {
+  name: "Trompito",
+  stock: 35,
+  categoryId: 2
+}
+Tools.create(tool2);
+
+const tool3 = {
+  name: "Andamios",
+  stock: 82,
+  categoryId: 3
+}
+Tools.create(tool3)
+
+const tool4 = {
+  name: "Amoladora",
+  stock: 10,
+  categoryId: 4
+}
+Tools.create(tool4);
+
+res.send('Carga Ok! -> TOOLS, CLIENTS, CATEGORYS')
 })
 
-//HARCODEANDO TOOLS
 
-server.post('/toolhd', (req, res) => {
-  
-  const tool1 = {
-    name: "Martillo",
-    stock: 43
-  }
-  Tools.create(tool1);
-
-  const tool2 = {
-    name: "Trompito",
-    stock: 35
-  }
-  Tools.create(tool2);
-
-  const tool3 = {
-    name: "Andamios",
-    stock: 82
-  }
-  Tools.create(tool3)
-
-  const tool4 = {
-    name: "Amoladora",
-    stock: 10
-  }
-  Tools.create(tool4);
-
-  res.send('Tools creadas en db')
-})
 
 server.post("/loginhd", (req, res) => {
   const user1 = {

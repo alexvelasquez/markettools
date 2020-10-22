@@ -46,6 +46,7 @@ const useStyles = makeStyles({
 // ];
 function Tools({ getAllTools, all_tools }) {
   const classes = useStyles();
+ 
 
   const [tool, setTool] = React.useState({name:'',dateModif:'',price:'',category:''});
   const [open, setOpen] = React.useState(false);
@@ -115,7 +116,7 @@ function Tools({ getAllTools, all_tools }) {
                {row.name}
              </TableCell>
              <TableCell align="center">{row.dateModif}</TableCell>
-             <TableCell align="center">{row.price}</TableCell>
+             <TableCell align="center">{row.stock}</TableCell>
              <TableCell align="center">{row.categoryId}             
              </TableCell>
              <TableCell align="center">

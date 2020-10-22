@@ -5,6 +5,7 @@ import {
     ALL_CLIENT,
     GET_ALL_TOOLS,
     LOGIN
+    //INSERT_CATEGORY
 } from "../actions/index";
 
 const initialState = {
