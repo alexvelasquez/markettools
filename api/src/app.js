@@ -2,14 +2,59 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const routes = require('./routes/index.js');
+const ind = require('./routes/index.js');
 const LocalStrategy = require('passport-local').Strategy
 const session = require('express-session')
-
-const { Client, Tools, User, Category } = require('./db.js');
 const passport = require('passport');
 
+const { Client, Tools, User, Category } = require('./db.js');
+
+
+const db = require('./db.js');
+ 
+passport.use(new LocalStrategy(
+  function(username, password, done, info) {
+    db.User.findOne({ where: {username: username}})
+      .then(user => {
+        if (!user) {
+          console.log("NO ENCUENTRA EL USUARIO")
+          return done(null, false);
+        }
+        if (user.password != password) {
+          console.log("NO PASA LA CONTRASEÑA", password, user.password)
+          return done(null, false);
+        }
+        console.log("ENCUENTRA EL USUARIO", user.dataValues)
+        return done(null, user.dataValues);
+      })
+      .catch(err => {
+        return done(err);
+      })
+  }));
+
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  db.User.findOne({ where: { id } })
+    .then(user => {
+      done(null, user.dataValues);
+    })
+    .catch(err => {
+      return done(err);
+    })
+});
+
 const server = express();
+
+server.use(require('express-session')({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false
+}));
 
 server.name = 'API';
 
@@ -21,62 +66,39 @@ server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // update to match the domain you will make the request from
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    console.log("este es el username", username)
-    console.log("este es el password", password)
-    User.findOne({ where: { username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Nombre de usuario incorrecto.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Contraseña incorrecta.' });
-      }
-      return done(null, user);
-    }});
-  }
-));
-
-// Esto permite que la información almacenada en la sesión sea lo más simple y pequeña posible
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-// Al deserealizar la información del usuario va a quedar almacenada en req.user
-passport.deserializeUser((id, done) => {
-  console.log("ENTRA EL ID", id)
-  User.findByPk(id)
-  .then((user) => {
-    done(null, user.dataValues);
-  }).catch(err => {
-    return done(err);
-  })
-  });
-
-server.use(session({
-  secret: "secret",
-  resave: true,
-  saveUninitialized: true
-}));
 
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.use('/', routes);
-
-// Error catching endware.
-server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-  const status = err.status || 500;
-  const message = err.message || err;
-  console.error(err);
-  res.status(status).send(message);
+server.use((req, res, next) => {
+   
+  console.log("Session! ", req.session);
+  console.log("User!", req.user);
+  next();
 });
 
 
+server.use('/', ind)
+
+
+server.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) { return next(err); }
+    if (!user) {
+      return res.send(user);
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.send(user)
+    });
+  })(req, res, next);
+})
 
 server.post('/login', (req, res) => {
   //Recibir las credenciales e iniciar sesion.
@@ -86,22 +108,40 @@ server.post('/login', (req, res) => {
   })
 })
 
+// server.post("/loginGoogle", (req, res, next) => {
+//   passport.authenticate("local", (err, user, info) => {
+//     if (err) { return next(err); }
+//     if (!user) {
+//       return res.send(user);
+//     }
+//     req.logIn(user, (err) => {
+//       if (err) {
+//         return next(err);
+//       }
+//       return res.send(user)
+//     });
+//   })(req, res, next);
+// })
+
+
 function isAuthenticated(req, res, next) {
-  if(req.isAuthenticated()){
-    console.log("entre en el authenticated")
-    next();
+    if(req.isAuthenticated()){
+      next();
+    }
+    else{
+      res.send(false);
+    }
   }
-  else{
-    res.send(false);
-  }
-}
 
 server.get("/logout", (req, res) => {
   req.logout();
-  res.status(200).send("Ok!")
+  res.send("Ok!")
 });
 
-server.get("/login", isAuthenticated, (req, res) => {
+
+server.get("/login",
+  isAuthenticated,
+  (req, res) => {
   res.send(req.user)
 });
 
@@ -233,19 +273,17 @@ const tool4 = {
 }
 Tools.create(tool4);
 
+const user1 = {
+  username: "admin",
+  password: "admin"
+}
+User.create(user1);
+ 
+
 res.send('Carga Ok! -> TOOLS, CLIENTS, CATEGORYS')
 })
 
-
-
-server.post("/loginhd", (req, res) => {
-  const user1 = {
-    username: "facundo94",
-    password: 1234
-  }
-  User.create(user1);
-  res.send(user1)
-})
+ 
 
 module.exports = server;
 

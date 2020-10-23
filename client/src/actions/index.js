@@ -127,9 +127,9 @@ export function insertCategory (date) {
 }
 
 export function login(date) {
-  console.log("este date", date)
+  console.log("Los datos del login", date)
   return function(dispatch) {
-    return axios.get(`http://localhost:3005/login`, date)
+    return axios.post(`http://localhost:3005/login`, date)
     .then(result => result.data)
     .then(data => {
       dispatch({
