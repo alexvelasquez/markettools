@@ -50,7 +50,7 @@ const server = express();
 
 
 server.use(require('express-session')({
-  secret: process.env.SECRET_KEY,
+  secret: 'secret',
   resave: false,
   saveUninitialized: false
 }));
