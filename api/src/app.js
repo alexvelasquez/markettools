@@ -1,45 +1,23 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const ind = require('./routes/index.js');
 const LocalStrategy = require('passport-local').Strategy
 const session = require('express-session')
 const passport = require('passport');
+const cors = require('cors');
 
 const { Client, Tools, User, Category } = require('./db.js');
 
-
 const db = require('./db.js');
- 
-passport.use(new LocalStrategy(
-  function(username, password, done, info) {
-    db.User.findOne({ where: {username: username}})
-      .then(user => {
-        if (!user) {
-          console.log("NO ENCUENTRA EL USUARIO")
-          return done(null, false);
-        }
-        if (user.password != password) {
-          console.log("NO PASA LA CONTRASEÑA", password, user.password)
-          return done(null, false);
-        }
-        console.log("ENCUENTRA EL USUARIO", user.dataValues)
-        return done(null, user.dataValues);
-      })
-      .catch(err => {
-        return done(err);
-      })
-  }));
-
-
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  db.User.findOne({ where: { id } })
+  User.findOne({ where: { id } })
     .then(user => {
       done(null, user.dataValues);
     })
@@ -47,11 +25,32 @@ passport.deserializeUser(function(id, done) {
       return done(err);
     })
 });
+ 
+passport.use(new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password'
+},
+  function(username, password, done) {
+    db.User.findOne({where: { username: username }}, function (err, user) {
+      console.log(username)
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Usuario incorrecto.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Contraseña incorrecta.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
 
 const server = express();
 
+
 server.use(require('express-session')({
-  secret: 'secret',
+  secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false
 }));
@@ -71,11 +70,20 @@ server.use((req, res, next) => {
 });
 
 
+
+server.use(express.static('public'));
+server.use(cookieParser());
+server.use(bodyParser());
+server.use(session({ secret: 'keyboard cat' }));
 server.use(passport.initialize());
 server.use(passport.session());
+server.use(cors({
+  exposedHeaders: ['Content-Length', 'A-BCD', 'Z-XYZ'],
+  credentials: true,
+}));
+
 
 server.use((req, res, next) => {
-   
   console.log("Session! ", req.session);
   console.log("User!", req.user);
   next();
@@ -83,7 +91,6 @@ server.use((req, res, next) => {
 
 
 server.use('/', ind)
-
 
 server.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -98,15 +105,13 @@ server.post("/login", (req, res, next) => {
       return res.send(user)
     });
   })(req, res, next);
-})
+});
 
-server.post('/login', (req, res) => {
-  //Recibir las credenciales e iniciar sesion.
-  passport.authenticate('local', {
-    successRedirect: "/",
-    failureRedirect: "/login"
-  })
-})
+server.post('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login',
+                                   failureFlash: true })
+);
 
 // server.post("/loginGoogle", (req, res, next) => {
 //   passport.authenticate("local", (err, user, info) => {
@@ -131,13 +136,7 @@ function isAuthenticated(req, res, next) {
     else{
       res.send(false);
     }
-  }
-
-server.get("/logout", (req, res) => {
-  req.logout();
-  res.send("Ok!")
-});
-
+  };
 
 server.get("/login",
   isAuthenticated,
@@ -145,6 +144,10 @@ server.get("/login",
   res.send(req.user)
 });
 
+server.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/")
+});
 
 
 
