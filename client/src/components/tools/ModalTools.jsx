@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ModalTools({ all_tools, open, onClose, onOpen, insertTools}) {
+function ModalTools({ all_tools, open, onClose, onOpen, insertTools, getAllTools }) {
 
   const [inputTools, setInputTools] = useState({ name: '', description: "", stock: "", categoryId: ""});
   
@@ -44,14 +44,10 @@ function ModalTools({ all_tools, open, onClose, onOpen, insertTools}) {
    });
   }
 
-  
   const handleSubmit = function(e){
-    e.preventDefault();   
-      
+    e.preventDefault();
     insertTools(inputTools);
-    getAllTools();    
-    
-     
+    getAllTools();
   }
 
   const classes = useStyles();
@@ -72,7 +68,7 @@ function ModalTools({ all_tools, open, onClose, onOpen, insertTools}) {
       <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Nueva Herramienta</DialogTitle>
         <form onSubmit={handleSubmit}>
-        <DialogContent>          
+        <DialogContent>
           <Grid container spacing={2}>
              <Grid item sm={12} md={6}>
                <TextField
@@ -135,7 +131,6 @@ function ModalTools({ all_tools, open, onClose, onOpen, insertTools}) {
              InputLabelProps={{
                 shrink: true,
               }}>
-                
                <MenuItem value="1">Carpinteria</MenuItem>
                <MenuItem value="2">Otro</MenuItem>
              </TextField>
@@ -149,10 +144,9 @@ function ModalTools({ all_tools, open, onClose, onOpen, insertTools}) {
           <Button type="submit" onClick={handleClose} color="primary">
             Agregar
           </Button>
-        </DialogActions>        
+        </DialogActions>
         </DialogContent>
         </form>
-        
       </Dialog>
     </div>
   );
@@ -162,15 +156,12 @@ const mapDispatchToProps = dispatch => {
   return {
     getAllTools: () => dispatch(getAllTools()),
     insertTools: (inputTools) => dispatch(insertTools(inputTools)),
-   
-   
   }
 }
 
 const mapStateToProps = state => {
   return {
     all_tools: state.all_tools
-     
 }
 }
 
