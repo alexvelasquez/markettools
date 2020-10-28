@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ModalTools from './ModalTools';
 import ModalCategory from './ModalCategory';
-import UpdateModalCategory from "./UpdateModalCategory";
+import UpdateModalTools from "./UpdateModalTools";
 // tables
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -41,7 +41,7 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
   const classes = useStyles();
  
 
-  const [tool, setTool] = React.useState({name:'',dateModif:'',price:'',category:''});
+  const [tools, setTool] = React.useState({name:'',dateModif:'',price:'',category:''});
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
@@ -49,9 +49,13 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
     getAllCategory();
     },[])
 
-  const openModal = (value,item) =>{
+    
+
+  const openModal = (value, item) =>{
     setOpen(value)
     setTool(item)
+
+    console.log('ITEMM', item)
     
   }
 
@@ -90,11 +94,10 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
       <Grid item xs={5} >
         <Grid container direction="row"  spacing={0}>
         <Grid item xs={6}>
-          <ModalTools tool={all_tools} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
+          <ModalTools tools={tools} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
         </Grid>
         <Grid item xs={6}>
-          <ModalCategory></ModalCategory>     
-                
+          <ModalCategory></ModalCategory>                
         </Grid>
         </Grid>
       </Grid>

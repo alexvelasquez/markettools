@@ -35,14 +35,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory, all_categorys}) {
+function ModalTools({ all_tools, open, onClose, onOpen, insertTools, getAllCategory, all_categorys}) {
 
   useEffect(()=>{
     getAllCategory();
 
   },[])
-
-  console.log('Esto es tool ',tools)
 
    
   const [inputTools, setInputTools] = useState({ name: '', description: "", stock: "", categoryId: ""});
@@ -70,7 +68,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
   const classes = useStyles();
 
   const handleOpen = () => {
-     onOpen(true, tools);
+     onOpen(true, all_tools);
   };
   const handleClose = () => {
      onClose(false);
@@ -80,10 +78,10 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
 
     <div>
     <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpen()}>
-      Nueva Herramienta
+      Modificar Herramienta
     </Button>
       <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Nueva Herramienta hola</DialogTitle>
+        <DialogTitle id="form-dialog-title">Modoficar Herramienta</DialogTitle>
         <form onSubmit={handleSubmit}>
         <DialogContent>          
           <Grid container spacing={2}>
@@ -92,8 +90,9 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                required
                  autoFocus
                  margin="dense"
-                 value={tools.name}
-                 id="name"                  
+                 //value={all_tools.name}
+                 id="name"
+                 name="name"
                  label="Nombre(*)"
                  InputLabelProps={{
                     shrink: true,
@@ -108,7 +107,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                 required
                  autoFocus
                  margin="dense"
-                 value={tools.name}
+                 //value={all_tools.name}
                  id="description"
                  name="description"
                  label="Descripción(*)"
@@ -129,7 +128,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                  name="stock"
                  label="Stock(*)"
                  type="number"
-                 value={tools.stock}
+                 //value={all_tools.price}
                  InputLabelProps={{
                     shrink: true,
                   }}
@@ -146,7 +145,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
              name="categoryId"
              label="Categoria(*)"
              select
-             value={tools.categoryId}
+             //value={all_tools.categoria}
              fullWidth
              InputLabelProps={{
                 shrink: true,
