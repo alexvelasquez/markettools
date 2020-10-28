@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ModalTools from './ModalTools';
 import ModalCategory from './ModalCategory';
+import UpdateModalCategory from "./UpdateModalCategory";
 // tables
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -51,6 +52,7 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
   const openModal = (value,item) =>{
     setOpen(value)
     setTool(item)
+    
   }
 
 
@@ -91,7 +93,8 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
           <ModalTools tool={all_tools} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
         </Grid>
         <Grid item xs={6}>
-          <ModalCategory></ModalCategory>
+          <ModalCategory></ModalCategory>     
+                
         </Grid>
         </Grid>
       </Grid>

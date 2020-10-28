@@ -74,19 +74,19 @@ server.use((req, res, next) => {
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.use((req, res, next) => {
+// server.use((req, res, next) => {
    
-  console.log("Session! ", req.session);
-  console.log("User!", req.user);
-  next();
-});
+//   console.log("Session! ", req.session);
+//   console.log("User!", req.user);
+//   next();
+// });
 
 
 server.use('/', ind)
 
 
 server.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {     
     if (err) { return next(err); }
     if (!user) {
       return res.send(user);
@@ -95,33 +95,21 @@ server.post("/login", (req, res, next) => {
       if (err) {
         return next(err);
       }
+      console.log('Entro aca')
+     
       return res.send(user)
     });
   })(req, res, next);
+   
 })
 
-server.post('/login', (req, res) => {
-  //Recibir las credenciales e iniciar sesion.
-  passport.authenticate('local', {
+server.post('/login', passport.authenticate ('local',{
+  //Recibir las credenciales e iniciar sesion.  
+    
     successRedirect: "/",
-    failureRedirect: "/login"
-  })
-})
-
-// server.post("/loginGoogle", (req, res, next) => {
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) { return next(err); }
-//     if (!user) {
-//       return res.send(user);
-//     }
-//     req.logIn(user, (err) => {
-//       if (err) {
-//         return next(err);
-//       }
-//       return res.send(user)
-//     });
-//   })(req, res, next);
-// })
+    failureRedirect: "/login"  
+}))
+ 
 
 
 function isAuthenticated(req, res, next) {

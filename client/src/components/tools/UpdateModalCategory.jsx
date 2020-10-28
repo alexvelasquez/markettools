@@ -77,7 +77,7 @@ const ModalCategory = ({insertCategory}) =>{
       Nueva categoria
     </Button>    
       <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">      
-        <DialogTitle id="form-dialog-title">Nueva Categoria</DialogTitle>
+        <DialogTitle id="form-dialog-title">Modificar Categoria</DialogTitle>
         <form onSubmit={handleSubmit}>
         <DialogContent>
           <Grid container spacing={2}>
