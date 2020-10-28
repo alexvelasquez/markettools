@@ -107,28 +107,15 @@ server.post("/login", (req, res, next) => {
       return res.send(user)
     });
   })(req, res, next);
-});
+   
+})
 
-server.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: true })
-);
-
-// server.post("/loginGoogle", (req, res, next) => {
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) { return next(err); }
-//     if (!user) {
-//       return res.send(user);
-//     }
-//     req.logIn(user, (err) => {
-//       if (err) {
-//         return next(err);
-//       }
-//       return res.send(user)
-//     });
-//   })(req, res, next);
-// })
+server.post('/login', passport.authenticate ('local',{
+  //Recibir las credenciales e iniciar sesion.  
+    successRedirect: "/",
+    failureRedirect: "/login"  
+}))
+ 
 
 
 function isAuthenticated(req, res, next) {
