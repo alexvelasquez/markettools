@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
-  
+
 }));
 
 
@@ -39,31 +39,29 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
 
   useEffect(()=>{
     getAllCategory();
-
   },[])
-
-  console.log('Esto es tool ',tools)
-
-   
-  const [inputTools, setInputTools] = useState({ name: '', description: "", stock: "", categoryId: ""});
-  
+  const [inputTools, setInputTools] = useState(tools);
   const handleChangeTools = function(e) {
+    const {name, value } = e.target
+
     setInputTools({
     ...inputTools,
-    [e.target.name]: e.target.value,
-   }); 
-   
+    [name]: value,
+   });
   }
 
   const handleSubmit = function(e){
-    e.preventDefault();   
- 
-      
-    insertTools(inputTools);
-    getAllTools();   
-    
-    onClose(false);
-     
+    e.preventDefault();
+    let data = {name:document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                stock:document.getElementById('stock').value}
+    console.log(data);
+    // inputTools.name = document.getElementById('name').value
+    // console.log(e.target);
+    // console.log(document.getElementById('description').value);
+    // insertTools(inputTools);
+    // getAllTools();
+    // onClose(false);
   }
 
   const classes = useStyles();
@@ -91,8 +89,9 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                required
                  autoFocus
                  margin="dense"
-                 value={tools.name}
-                 id="name"                  
+                 value={'aaaa'}
+                 id="name"
+                 name="name"
                  label="Nombre(*)"
                  InputLabelProps={{
                     shrink: true,
@@ -107,7 +106,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                 required
                  autoFocus
                  margin="dense"
-                 value={tools.name}
+                 defaultValue={tools.name}
                  id="description"
                  name="description"
                  label="Descripción(*)"
@@ -128,7 +127,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                  name="stock"
                  label="Stock(*)"
                  type="number"
-                 value={tools.stock}
+                 defaultValue={tools.stock}
                  InputLabelProps={{
                     shrink: true,
                   }}
@@ -145,16 +144,15 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
              name="categoryId"
              label="Categoria(*)"
              select
-             value={tools.categoryId}
+             defaultValue={tools.categoryId}
              fullWidth
              InputLabelProps={{
                 shrink: true,
               }}>
-                {all_categorys.map((cat)=>{       
+                {all_categorys.map((cat)=>{
                    return <MenuItem value={cat.id}>{cat.name}</MenuItem>
-               }) 
-             }  
-                
+               })
+             }
              </TextField>
               </FormControl>
              </Grid>
@@ -164,7 +162,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
             Cancelar
           </Button>
           <Button id="send" type="submit" color="primary">
-            Agregar 
+            Agregar
           </Button>
         </DialogActions>
         </DialogContent>
@@ -179,9 +177,6 @@ const mapDispatchToProps = dispatch => {
     getAllTools: () => dispatch(getAllTools()),
     insertTools: (inputTools) => dispatch(insertTools(inputTools)),
     getAllCategory: () => dispatch(getAllCategory())
-
-   
-   
   }
 }
 
@@ -189,7 +184,7 @@ const mapStateToProps = state => {
   return {
     all_tools: state.all_tools,
     all_categorys: state.all_categorys
-     
+
 }
 }
 
