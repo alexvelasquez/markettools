@@ -55,7 +55,6 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
    
   }
 
-  
   const handleSubmit = function(e){
     e.preventDefault();   
  
@@ -85,7 +84,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
       <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Nueva Herramienta hola</DialogTitle>
         <form onSubmit={handleSubmit}>
-        <DialogContent>          
+        <DialogContent>
           <Grid container spacing={2}>
              <Grid item sm={12} md={6}>
                <TextField
@@ -167,10 +166,9 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
           <Button id="send" type="submit" color="primary">
             Agregar 
           </Button>
-        </DialogActions>        
+        </DialogActions>
         </DialogContent>
         </form>
-        
       </Dialog>
     </div>
   );

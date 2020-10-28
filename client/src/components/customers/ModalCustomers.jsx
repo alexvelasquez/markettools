@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { connect } from "react-redux";
-import { getClient } from "../../actions/index";
+import { getClient, insertClient } from "../../actions/index";
 
 const useStyles = makeStyles({
   button:{
@@ -18,24 +18,42 @@ const useStyles = makeStyles({
   paper: { minWidth: "500px" },
 });
 
-const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
+const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client, insertClient }) => {
   const classes = useStyles();
-  const defaultCustomer = {name:'',dni:'',phone:'',email:'',adress:''};
+  // const defaultCustomer = {name:'',dni:'',phone:'',email:'',adress:''};
+
+  const [inputClient, setInputClient] = useState({
+    name: "",
+    lastname: "",
+    dni: "",
+    email: "",
+    adress: "",
+    phone: ""
+  })
+
+  const handleChangeClient = function(e) {
+    setInputClient({
+    ...inputClient,
+    [e.target.name]: e.target.value
+   });
+  }
+
+  const handleSubmit = function(e){
+    e.preventDefault();
+    insertClient(inputClient);
+    getClient();
+  }
+
   const handleOpen = () => {
-     onOpen(true,defaultCustomer);
+     onOpen(true,inputClient);
   };
   const handleClose = () => {
      onClose(false);
   };
 
-  useEffect(() => {
-    getClient()
-    },[])
-
-    console.log('A ver el State de CLientes', all_client)
+  console.log('A ver el state de CLientes', all_client)
 
   return (
-
 
     <div>
     <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpen()}>
@@ -43,28 +61,28 @@ const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
     </Button>
       <Dialog fullWidth={true} maxWidth={'md'} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Nuevo Cliente</DialogTitle>
+        <form onSubmit={handleSubmit}>
         <DialogContent>
-          {all_client ? all_client.map(customer => {
-            return (
               <Grid container spacing={4}>
                  <Grid item sm={12} md={4}>
                    <TextField
                      autoFocus
                      margin="dense"
                      id="name"
-                     defaultValue={customer.name}
+                     defaultValue={all_client.name}
                      label="Nombre/s(*)"
                      InputLabelProps={{
                         shrink: true,
                       }}
                      type="text"
                      fullWidth
+                     onChange={handleChangeClient}
                    />
                  </Grid>
                  <Grid item sm={12} md={4}>
                    <TextField
                      autoFocus
-                     defaultValue={customer.lastname}
+                     defaultValue={all_client.lastname}
                      margin="dense"
                      id="lastname"
                      label="Apellido/s(*)"
@@ -73,12 +91,13 @@ const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
                       }}
                      type="text"
                      fullWidth
+                     onChange={handleChangeClient}
                    />
                  </Grid>
                  <Grid item sm={12} md={4}>
                    <TextField
                      autoFocus
-                     defaultValue={customer.dni}
+                     defaultValue={all_client.dni}
                      margin="dense"
                      id="dni"
                      label="Dni(*)"
@@ -86,13 +105,14 @@ const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
                      InputLabelProps={{
                         shrink: true,
                       }}
-                       fullWidth
+                      fullWidth
+                      onChange={handleChangeClient}
                    />
                  </Grid>
                  <Grid item sm={12} md={4}>
                  <TextField
                    autoFocus
-                   defaultValue={customer.email}
+                   defaultValue={all_client.email}
                    margin="dense"
                    id="email"
                    label="Email(*)"
@@ -100,13 +120,14 @@ const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
                    InputLabelProps={{
                       shrink: true,
                     }}
-                     fullWidth
+                    fullWidth
+                    onChange={handleChangeClient}
                  />
                  </Grid>
                  <Grid item sm={12} md={4}>
                  <TextField
                    autoFocus
-                   defaultValue={customer.adress}
+                   defaultValue={all_client.adress}
                    margin="dense"
                    id="adress"
                    label="Dirección(*)"
@@ -114,13 +135,14 @@ const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
                    InputLabelProps={{
                       shrink: true,
                     }}
-                     fullWidth
+                    fullWidth
+                    onChange={handleChangeClient}
                  />
                  </Grid>
                  <Grid item sm={12} md={4}>
                  <TextField
                    autoFocus
-                   defaultValue={customer.phone}
+                   defaultValue={all_client.phone}
                    margin="dense"
                    id="phone"
                    label="Teléfono(*)"
@@ -128,14 +150,13 @@ const ModalCustomers = ({ open, onClose, onOpen, getClient, all_client }) => {
                    InputLabelProps={{
                       shrink: true,
                     }}
-                     fullWidth
+                    fullWidth
+                    onChange={handleChangeClient}
                  />
                  </Grid>
               </Grid>
-          )})
-          : "Aún no hay clientes."
-                  }
         </DialogContent>
+        </form>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancelar
@@ -153,6 +174,7 @@ const mapDispatchToProps = dispatch => {
 
   return {
     getClient: () => dispatch(getClient()),
+    insertClient: (inputClient) => dispatch(insertClient())
   }
   }
 

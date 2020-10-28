@@ -6,7 +6,8 @@ import {
     GET_ALL_TOOLS,
     INSERT_TOOLS,
     GET_ALL_CATEGORY,
-    LOGIN
+    LOGIN,
+    INSERT_CLIENT
     //INSERT_CATEGORY
 } from "../actions/index";
 
@@ -41,15 +42,20 @@ const reducer = (state = initialState, action) => {
         ...state,
         all_categorys: action.payload,
       };
-      case INSERT_TOOLS:         
+      case INSERT_TOOLS:
       return {
         ...state, 
         all_tools:  [...state.all_tools, action.payload] //Usar esto para actualizar el estado
-      };      
+      };
       case LOGIN:
       return {
         ...state,
         users: action.payload,
+      };
+      case INSERT_CLIENT:
+      return {
+        ...state, 
+        all_client:  [...state.all_client, action.payload] //Usar esto para actualizar el estado
       };
     default:
       return state;

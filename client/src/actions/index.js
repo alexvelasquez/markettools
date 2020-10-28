@@ -11,6 +11,7 @@ export const INSERT_CATEGORY = "INSERT_CATEGORY";
 export const LOGIN = "LOGIN";
 export const INSERT_TOOLS = "INSERT_TOOLS";
 export const GET_ALL_CATEGORY = "GET_ALL_CATEGORY";
+export const INSERT_CLIENT = "INSERT_CLIENT";
 
 
 // export function infoMovie (apiKey, ciudad ) {
@@ -97,21 +98,7 @@ export function getTool() {
   }
 }
 
-export function addTool(payload) {
-  return {
-    type: "ADD_TOOL",
-    payload
-  }
-}
-
-export function addClient(payload) {
-  return {
-    type: "ADD_CLIENT",
-    payload
-  }
-}
-
-export function insertCategory (date) {
+export function insertCategory(date) {
   console.log('EL insert llega ', date)
   return function(dispatch) {
     return axios.post(`http://localhost:3005/tools/insertCategory`,date)
@@ -141,8 +128,8 @@ export function login(date) {
   }
 }
 
-export function insertTools (date ) {
-  console.log('EL insertTOOLS llega ', date )
+export function insertTools(date) {
+  console.log('EL insertTOOLS llega', date)
   return function(dispatch) {
   return axios.post(`http://localhost:3005/tools/insertTools`,date)
     .then(result => result.data)
@@ -152,6 +139,21 @@ export function insertTools (date ) {
         payload: data
       })
       console.log("El insert TOOLS devuelve ",data)
+    })
+  }
+}
+
+export function insertClient(date) {
+  console.log("El insertClient llega", date)
+  return function(dispatch) {
+  return axios.post(`http://localhost:3005/clients/register`, date)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: INSERT_CLIENT,
+        payload: data
+      })
+      console.log("El insertClient devuelve", data)
     })
   }
 }
