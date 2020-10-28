@@ -83,20 +83,11 @@ server.use(cors({
 }));
 
 
-<<<<<<< HEAD
-// server.use((req, res, next) => {
-   
-//   console.log("Session! ", req.session);
-//   console.log("User!", req.user);
-//   next();
-// });
-=======
 server.use((req, res, next) => {
   console.log("Session! ", req.session);
   console.log("User!", req.user);
   next();
 });
->>>>>>> 24d9a023aab1ea2ba6865634fa51694bb98010f2
 
 
 server.use('/', ind)
@@ -116,18 +107,6 @@ server.post("/login", (req, res, next) => {
       return res.send(user)
     });
   })(req, res, next);
-<<<<<<< HEAD
-   
-})
-
-server.post('/login', passport.authenticate ('local',{
-  //Recibir las credenciales e iniciar sesion.  
-    
-    successRedirect: "/",
-    failureRedirect: "/login"  
-}))
- 
-=======
 });
 
 server.post('/login',
@@ -150,7 +129,6 @@ server.post('/login',
 //     });
 //   })(req, res, next);
 // })
->>>>>>> 24d9a023aab1ea2ba6865634fa51694bb98010f2
 
 
 function isAuthenticated(req, res, next) {
