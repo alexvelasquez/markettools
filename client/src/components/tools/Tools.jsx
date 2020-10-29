@@ -36,12 +36,20 @@ const useStyles = makeStyles({
     marginBottom:12,
   }
 });
- 
-function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
-  const classes = useStyles();
- 
 
-  const [tools, setTool] = React.useState({name:'',dateModif:'',price:'',category:''});
+function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
+  const classes = useStyles();
+
+  const [tools, setTool] = React.useState({categoryId:null,
+                                           createdAt:null,
+                                           description:null,
+                                           id:null,
+                                           name:null,
+                                           orderId:null,
+                                           status:null,
+                                           stock:null,
+                                           updatedAt:null
+                                          });
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
@@ -49,20 +57,17 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
     getAllCategory();
     },[])
 
-    
+
 
   const openModal = (value, item) =>{
-    setOpen(value)
     setTool(item)
-
-    console.log('ITEMM', item)
-    
+    setOpen(value)
   }
 
 
   const closeModal = (value) =>{
-    setOpen(value)
     setTool({name:'',dateModif:'',price:'',category:''})
+    setOpen(value)
   }
 
 
@@ -75,9 +80,6 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-    
-
 
 
   return (
@@ -97,7 +99,7 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
           <ModalTools tools={tools} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
         </Grid>
         <Grid item xs={6}>
-          <ModalCategory></ModalCategory>                
+          <ModalCategory></ModalCategory>
         </Grid>
         </Grid>
       </Grid>
@@ -122,10 +124,10 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
              <TableCell align="center">{row.dateModif}</TableCell>
              <TableCell align="center">{row.stock}</TableCell>
              <TableCell align="center">{
-              all_categorys.map((cat)=>{                
-                  return cat.id === row.categoryId ? cat.name : '' 
-               }) 
-             }             
+              all_categorys.map((cat)=>{
+                  return cat.id === row.categoryId ? cat.name : ''
+               })
+             }
              </TableCell>
              <TableCell align="center">
              <IconButton aria-label="edit" onClick={()=>openModal(true,row)}>
@@ -155,7 +157,7 @@ function Tools({ getAllTools, all_tools, getAllCategory, all_categorys }) {
   const mapDispatchToProps = dispatch => {
     return {
       getAllTools: () => dispatch(getAllTools()),
-      getAllCategory: () => dispatch(getAllCategory()) 
+      getAllCategory: () => dispatch(getAllCategory())
     }
   }
 
