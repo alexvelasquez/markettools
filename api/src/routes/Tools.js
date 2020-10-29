@@ -25,18 +25,35 @@ server.get('/:id', (req, res, next) => {
 }) 
 
 server.post('/insertTools', (req, res, next) => {
-       
-      Tools.create(req.body)    
+      Tools.create(req.body)
       .then(date => {
         res.send(date)
     })
-
-     
   })
+
+server.put('/update/:id', (req, res, next) => {
+    const { name, description, stock } = req.body
+    Tools.findOne({where: {id: req.params.id}})
+    .then(tools => {
+		tools.update({
+			name,
+			description,
+			stock,
+        })
+        return tools
+	})
+    .then(tools => {
+        res.send(tools)
+    })
+    .catch(err => {
+        console.log("este es el error", err)
+        return err
+    })
+});
 
 
 //**************************************
-//|                CATRGORYES          |
+//|                CATEGORIES          |
 //|                                    |
 //**************************************
 server.post('/insertCategory', (req, res, next) => {
