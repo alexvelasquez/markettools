@@ -12,7 +12,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 
-import { getAllTools, insertTools, getAllCategory } from '../../actions/index';
+import { getAllTools, insertTools, getAllCategory, updateTools } from '../../actions/index';
 import { connect } from  'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory, all_categorys}) {
+function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory, all_categorys, updateTools}) {
 
   useEffect(()=>{
     getAllCategory();
@@ -54,7 +54,7 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
   
   const handleSubmit = function(e){
     e.preventDefault();
-
+    alert()
     if(tools.id){
       let data = {
         id: tools.id,
@@ -63,6 +63,8 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
         stock: document.getElementById('stock').value,
         categoryId: document.getElementById('categoryId').value       
                 }
+      global.data = data
+      updateTools(data)
       onClose(false);
       console.log('El DATA UPDATE ',data);
 
@@ -172,29 +174,8 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
            
         </NativeSelect>
         <FormHelperText>With visually hidden label</FormHelperText>
-      </FormControl>
-             <FormControl className={classes.formControl}>
-             {/* <TextField
-            required
-             onChange={handleChangeTools}
-             id="categoryId"
-             name="categoryId"
-             label="Categoria(*)"
-             select
-             //defaultValue={tool.categoryId}
-             fullWidth
-             InputLabelProps={{
-                shrink: true,
-              }}>
-                {all_categorys.map((cat)=>{
-                   //return <MenuItem value={cat.id}>{cat.name}</MenuItem>
-               })
-             }
-
-              
-             </TextField> */}
-              </FormControl>
-             </Grid>
+      </FormControl>              
+          </Grid>
           </Grid>
           <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -215,7 +196,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getAllTools: () => dispatch(getAllTools()),
     insertTools: (inputTools) => dispatch(insertTools(inputTools)),
-    getAllCategory: () => dispatch(getAllCategory())
+    getAllCategory: () => dispatch(getAllCategory()),
+    updateTools: (data) => dispatch(updateTools(global.data))
   }
 }
 
