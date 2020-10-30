@@ -12,6 +12,7 @@ export const LOGIN = "LOGIN";
 export const INSERT_TOOLS = "INSERT_TOOLS";
 export const GET_ALL_CATEGORY = "GET_ALL_CATEGORY";
 export const INSERT_CLIENT = "INSERT_CLIENT";
+export const UPDATE_CLIENT = "UPDATE_CLIENT"
 
 
 // export function infoMovie (apiKey, ciudad ) {
@@ -98,10 +99,10 @@ export function getTool() {
   }
 }
 
-export function insertCategory(date) {
-  console.log('EL insert llega ', date)
+export function insertCategory(category) {
+  console.log('EL insert llega ', category)
   return function(dispatch) {
-    return axios.post(`http://localhost:3005/tools/insertCategory`,date)
+    return axios.post(`http://localhost:3005/tools/insertCategory`,category)
       .then(result => result.data)
       .then(data => {
         dispatch({
@@ -113,10 +114,10 @@ export function insertCategory(date) {
   };
 }
 
-export function login(date) {
-  console.log("Los datos del login", date)
+export function login(login) {
+  console.log("Los datos del login", login)
   return function(dispatch) {
-    return axios.post(`http://localhost:3005/login`, date)
+    return axios.post(`http://localhost:3005/login`, login)
     .then(result => result.data)
     .then(data => {
       dispatch({
@@ -128,10 +129,10 @@ export function login(date) {
   }
 }
 
-export function insertTools(date) {
-  console.log('EL insertTOOLS llega', date)
+export function insertTools(tools) {
+  console.log('EL insertTOOLS llega', tools)
   return function(dispatch) {
-  return axios.post(`http://localhost:3005/tools/insertTools`,date)
+  return axios.post(`http://localhost:3005/tools/insertTools`, tools)
     .then(result => result.data)
     .then(data => {
       dispatch({
@@ -143,10 +144,10 @@ export function insertTools(date) {
   }
 }
 
-export function insertClient(date) {
-  console.log("El insertClient llega", date)
+export function insertClient(client) {
+  console.log("El insertClient llega", client)
   return function(dispatch) {
-  return axios.post(`http://localhost:3005/clients/register`, date)
+  return axios.post(`http://localhost:3005/clients/register`, client)
     .then(result => result.data)
     .then(data => {
       dispatch({
@@ -154,6 +155,21 @@ export function insertClient(date) {
         payload: data
       })
       console.log("El insertClient devuelve", data)
+    })
+  }
+}
+
+export function updateClient(client) {
+  console.log("El updateClient llega", client)
+  return function(dispatch) {
+  return axios.post(`http://localhost:3005/clients/updateClient/:id`, client)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: UPDATE_CLIENT,
+        payload: data
+      })
+      console.log("El updateClient devuelve", data)
     })
   }
 }

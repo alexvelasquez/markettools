@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import ModalCustomers from './ModalCustomers';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +18,18 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+
+//Modal
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { getClient } from '../../actions/index';
 import { connect } from 'react-redux';
@@ -50,15 +61,36 @@ function Customers({ getClient, all_client }) {
     },[])
 
   const [open, setOpen] = React.useState(false);
+  const [client, setClient] = React.useState({name:'',dni:'',phone:'',email:'',adress:''});
 
-  const openModal = (value,item) =>{
+  const handleOpen = (item) => {
+      setClient(item)
+      setOpen(true)
+  };
+  const handleClose = () => {
+    setClient({name:null,
+             dni:null,
+             description:null,
+             phone:null,
+             email:null,
+             adress:null,
+            })
+    setOpen(false)
+  };
 
-    setOpen(value)
-    getClient(item)
+  const handleSubmit = function(e){
+    e.preventDefault();
+    // insertTools(tools);
+    // getAllTools();
+    // onClose(false);
   }
-  const closeModal = (value) =>{
-    setOpen(value)
-    getClient({name:'',dni:'',phone:'',email:'',adress:''})
+
+  const handleChangeClient = function(e) {
+    const {id, value } = e.target
+      setClient({
+      ...client,
+      [id]: value,
+    });
   }
 
   // pagination
@@ -72,7 +104,6 @@ function Customers({ getClient, all_client }) {
     setPage(0);
   };
 
-
   return (
     <div>
     <Toolbar />
@@ -85,7 +116,116 @@ function Customers({ getClient, all_client }) {
     </Breadcrumbs>
     <Grid container>
        <Grid item sm={12} align="right">
-        <ModalCustomers customer={all_client} open={open} onClose={closeModal} onOpen={openModal}></ModalCustomers>
+        <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpen(client)}>
+            Nuevo Cliente
+          </Button>
+            <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">{client.id ? 'Modificar' : 'Nuevo'} Cliente</DialogTitle>
+              <form onSubmit={handleSubmit}>
+        <DialogContent>
+              <Grid container spacing={4}>
+                 <Grid item sm={12} md={4}>
+                   <TextField
+                     autoFocus
+                     margin="dense"
+                     id="name"
+                     defaultValue={client.name}
+                     label="Nombre/s(*)"
+                     InputLabelProps={{
+                        shrink: true,
+                      }}
+                     type="text"
+                     fullWidth
+                     onChange={handleChangeClient}
+                   />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                   <TextField
+                     autoFocus
+                     defaultValue={client.lastname}
+                     margin="dense"
+                     id="lastname"
+                     label="Apellido/s(*)"
+                     InputLabelProps={{
+                        shrink: true,
+                      }}
+                     type="text"
+                     fullWidth
+                     onChange={handleChangeClient}
+                   />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                   <TextField
+                     autoFocus
+                     defaultValue={client.dni}
+                     margin="dense"
+                     id="dni"
+                     label="Dni(*)"
+                     type="number"
+                     InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth
+                      onChange={handleChangeClient}
+                   />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                 <TextField
+                   autoFocus
+                   defaultValue={client.email}
+                   margin="dense"
+                   id="email"
+                   label="Email(*)"
+                   type="email"
+                   InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    onChange={handleChangeClient}
+                 />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                 <TextField
+                   autoFocus
+                   defaultValue={client.adress}
+                   margin="dense"
+                   id="adress"
+                   label="Dirección(*)"
+                   type="text"
+                   InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    onChange={handleChangeClient}
+                 />
+                 </Grid>
+                 <Grid item sm={12} md={4}>
+                 <TextField
+                   autoFocus
+                   defaultValue={client.phone}
+                   margin="dense"
+                   id="phone"
+                   label="Teléfono(*)"
+                   type="number"
+                   InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    onChange={handleChangeClient}
+                 />
+                 </Grid>
+              </Grid>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancelar
+                </Button>
+                <Button id="send" type="submit" color="primary">
+                  Agregar
+                </Button>
+              </DialogActions>
+        </DialogContent>
+        </form>
+            </Dialog>
         </Grid>
     </Grid>
     <TableContainer component={Paper}>
@@ -112,10 +252,10 @@ function Customers({ getClient, all_client }) {
              <TableCell align="center">{row.email}</TableCell>
              <TableCell align="center">{row.adress}</TableCell>
              <TableCell align="center">
-             <IconButton aria-label="edit" onClick={() => openModal(true,row)}>
+             <IconButton aria-label="edit" onClick={() => handleOpen(row)}>
                <EditIcon />
              </IconButton>
-             <IconButton aria-label="delete" >
+             <IconButton aria-label="delete">
                <DeleteIcon />
              </IconButton>
              </TableCell>
@@ -143,9 +283,9 @@ function Customers({ getClient, all_client }) {
     }
   }
 
-    const mapStateToProps = state => {
-      return {
-        all_client: state.all_client,
+  const mapStateToProps = state => {
+    return {
+      all_client: state.all_client,
     }
   }
 
