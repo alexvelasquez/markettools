@@ -30,18 +30,24 @@ passport.use(new LocalStrategy({
   usernameField: 'username',
   passwordField: 'password'
 },
-  function(username, password, done) {
-    db.User.findOne({where: { username: username }}, function (err, user) {
-      console.log(username)
-      if (err) { return done(err); }
+  async function(username, password, done) {
+    // console.log("ESTE es username", username)
+    // console.log("ESTE es password", password)
+    try {
+      const user = await User.findOne({where: { username: username }})
+      // console.log("USERNAMEE", user)
       if (!user) {
         return done(null, false, { message: 'Usuario incorrecto.' });
       }
-      if (!user.validPassword(password)) {
+      if (user.password !== password) {
+        console.log('bad pass')
         return done(null, false, { message: 'Contraseña incorrecta.' });
       }
       return done(null, user);
-    });
+      
+    } catch (error) {
+      return done(error);
+    }
   }
 ));
 
@@ -73,7 +79,7 @@ server.use((req, res, next) => {
 
 server.use(express.static('public'));
 server.use(cookieParser());
-server.use(bodyParser());
+// server.use(bodyParser());
 server.use(session({ secret: 'keyboard cat' }));
 server.use(passport.initialize());
 server.use(passport.session());
@@ -93,30 +99,21 @@ server.use((req, res, next) => {
 server.use('/', ind)
 
 server.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {     
+  passport.authenticate("local",
+  (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      return res.send(user);
+      return res.send(info);
     }
     req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }
-      console.log('Entro aca')
-     
-      return res.send(user)
+      // console.log('Entro aca')
+      return res.send({id:user.id, username:user.username})
     });
   })(req, res, next);
-   
 })
-
-server.post('/login', passport.authenticate ('local',{
-  //Recibir las credenciales e iniciar sesion.  
-    successRedirect: "/",
-    failureRedirect: "/login"  
-}))
- 
-
 
 function isAuthenticated(req, res, next) {
     if(req.isAuthenticated()){
