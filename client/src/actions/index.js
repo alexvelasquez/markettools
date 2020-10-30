@@ -12,6 +12,7 @@ export const LOGIN = "LOGIN";
 export const INSERT_TOOLS = "INSERT_TOOLS";
 export const GET_ALL_CATEGORY = "GET_ALL_CATEGORY";
 export const INSERT_CLIENT = "INSERT_CLIENT";
+export const UPDATE_TOOLS = "UPDATE_TOOLS";
 
 
 // export function infoMovie (apiKey, ciudad ) {
@@ -154,6 +155,20 @@ export function insertClient(date) {
         payload: data
       })
       console.log("El insertClient devuelve", data)
+    })
+  }
+}
+export function updateTools(date) {
+  console.log("El UPDATE_TOOLS llega", date)
+  return function(dispatch) {
+  return axios.put(`http://localhost:3005/clients/register`, date)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: UPDATE_TOOLS,
+        payload: data
+      })
+      console.log("El UPDATE_TOOLS", data)
     })
   }
 }

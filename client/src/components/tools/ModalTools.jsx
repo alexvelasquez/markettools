@@ -7,8 +7,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl'; 
+import NativeSelect from '@material-ui/core/NativeSelect';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
 
 import { getAllTools, insertTools, getAllCategory } from '../../actions/index';
 import { connect } from  'react-redux';
@@ -48,25 +50,29 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
     ...inputTools,
     [name]: value,
    });
-  }
-
-  console.log('Que trae el categoryId ',tools.categoryId)
-
+  }  
+  
   const handleSubmit = function(e){
     e.preventDefault();
-    let data = {
-      id: tools.id,
-      name:document.getElementById('name').value,
-      description: document.getElementById('description').value,
-      stock:document.getElementById('stock').value,
-      //categoryId:document.getElementById('categoryId').value, 
-      categoryId: 1 
-              }
-    console.log('El DATA UPDATE ',data);
+
+    if(tools.id){
+      let data = {
+        id: tools.id,
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        stock: document.getElementById('stock').value,
+        categoryId: document.getElementById('categoryId').value       
+                }
+      onClose(false);
+      console.log('El DATA UPDATE ',data);
+
+    }else{      
+      insertTools(inputTools);
+      getAllTools();
+      onClose(false);
+
+    }
      
-    // insertTools(inputTools);
-    // getAllTools();
-    // onClose(false);
   }
 
   const classes = useStyles();
@@ -85,7 +91,9 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
       Nueva Herramienta
     </Button>
       <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Nueva Herramienta</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          {tools.id === null ? 'Nueva Herramienta ' : 'Modificar Herramienta'} 
+        </DialogTitle>
         <form onSubmit={handleSubmit}>
         <DialogContent>
           <Grid container spacing={2}>
@@ -141,24 +149,50 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                />
              </Grid>
              <Grid item sm={12} md={4}>
+
+
              <FormControl className={classes.formControl}>
-             <TextField
+        <NativeSelect
+          defaultValue={tools.categoryId}
+          className={classes.selectEmpty}
+          inputProps={{ 'aria-label': 'age' }}
+          id="categoryId"
+        >
+           
+          <option value={tools.categoryId}>
+          {all_categorys.map((nameCat)=>{
+             return tools.categoryId === nameCat.id ? nameCat.name : null
+          })
+          }     
+          </option>
+          {all_categorys.map((cat)=>{
+             return <option value={cat.id}>{cat.name}</option>
+          })
+          }
+           
+        </NativeSelect>
+        <FormHelperText>With visually hidden label</FormHelperText>
+      </FormControl>
+             <FormControl className={classes.formControl}>
+             {/* <TextField
             required
              onChange={handleChangeTools}
              id="categoryId"
              name="categoryId"
              label="Categoria(*)"
              select
-             defaultValue={tools.categoryId}
+             //defaultValue={tool.categoryId}
              fullWidth
              InputLabelProps={{
                 shrink: true,
               }}>
                 {all_categorys.map((cat)=>{
-                   return <MenuItem value={cat.id}>{cat.name}</MenuItem>
+                   //return <MenuItem value={cat.id}>{cat.name}</MenuItem>
                })
              }
-             </TextField>
+
+              
+             </TextField> */}
               </FormControl>
              </Grid>
           </Grid>
