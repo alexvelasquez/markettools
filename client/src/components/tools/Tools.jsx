@@ -5,9 +5,20 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import ModalTools from './ModalTools';
 import ModalCategory from './ModalCategory';
-import UpdateModalTools from "./UpdateModalTools";
+
+//Modal
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+
 // tables
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,7 +33,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { getAllTools, getAllCategory } from '../../actions/index';
+import { getAllTools, insertTools, getAllCategory } from '../../actions/index';
 import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
@@ -39,7 +50,6 @@ const useStyles = makeStyles({
 
 function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
   const classes = useStyles();
-
   const [tools, setTool] = React.useState({categoryId:null,
                                            createdAt:null,
                                            description:null,
@@ -59,15 +69,41 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
 
 
 
-  const openModal = (value, item) =>{
-    setTool(item)
-    setOpen(value)
+
+  const handleOpen = (item) => {
+      setTool(item)
+      setOpen(true)
+  };
+  const handleClose = () => {
+    setTool({categoryId:null,
+             createdAt:null,
+             description:null,
+             id:null,
+             name:null,
+             orderId:null,
+             status:null,
+             stock:null,
+             updatedAt:null
+            })
+    setOpen(false)
+  };
+
+  const handleSubmit = function(e){
+    e.preventDefault();
+    // insertTools(tools);
+    // getAllTools();
+    // onClose(false);
   }
 
 
-  const closeModal = (value) =>{
-    setTool({name:'',dateModif:'',price:'',category:''})
-    setOpen(value)
+
+  const handleChangeTools = function(e) {
+    const {name, value } = e.target
+
+    setTool({
+    ...tools,
+    [name]: value,
+   });
   }
 
 
@@ -96,7 +132,99 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
       <Grid item xs={5} >
         <Grid container direction="row"  spacing={0}>
         <Grid item xs={6}>
-          <ModalTools tools={tools} open={open} onClose={closeModal} onOpen={openModal}></ModalTools>
+          <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleOpen(tools)}>
+            Nueva Herramienta
+          </Button>
+            <Dialog  open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">{tools.id ? 'Modificar' : 'Nueva'} Herramienta</DialogTitle>
+              <form onSubmit={handleSubmit}>
+              <DialogContent>
+                <Grid container spacing={2}>
+                   <Grid item sm={12} md={6}>
+                     <TextField
+                     required
+                       autoFocus
+                       margin="dense"
+                       defaultValue={tools.name}
+                       id="name"
+                       name="name"
+                       label="Nombre(*)"
+                       InputLabelProps={{
+                          shrink: true,
+                        }}
+                       type="text"
+                       fullWidth
+                       onChange={handleChangeTools}
+                     />
+                   </Grid>
+                   <Grid item sm={12} md={6}>
+                     <TextField
+                      required
+                       autoFocus
+                       margin="dense"
+                       defaultValue={tools.description}
+                       id="description"
+                       name="description"
+                       label="Descripción(*)"
+                       InputLabelProps={{
+                          shrink: true,
+                        }}
+                       type="text"
+                       fullWidth
+                       onChange={handleChangeTools}
+                     />
+                   </Grid>
+
+                   <Grid item sm={12} md={6}>
+
+                     <TextField
+                      required
+                       margin="dense"
+                       id="stock"
+                       name="stock"
+                       label="Stock(*)"
+                       type="number"
+                       defaultValue={tools.stock}
+                       InputLabelProps={{
+                          shrink: true,
+                        }}
+                         fullWidth
+                         onChange={handleChangeTools}
+                     />
+                   </Grid>
+                   <Grid item sm={12} md={6}>
+                       <FormControl className={classes.formControl}>
+                       <TextField
+                        required
+                         onChange={handleChangeTools}
+                         id="categoryId"
+                         name="categoryId"
+                         label="Categoria(*)"
+                         select
+                         defaultValue={tools.categoryId}
+                         fullWidth
+                         InputLabelProps={{
+                            shrink: true,
+                          }}>
+                            {all_categorys.map((cat)=>{
+                               return <MenuItem value={cat.id}>{cat.name}</MenuItem>
+                           })
+                         }
+                         </TextField>
+                        </FormControl>
+                   </Grid>
+                </Grid>
+                <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancelar
+                </Button>
+                <Button id="send" type="submit" color="primary">
+                  Agregar
+                </Button>
+              </DialogActions>
+              </DialogContent>
+              </form>
+            </Dialog>
         </Grid>
         <Grid item xs={6}>
           <ModalCategory></ModalCategory>
@@ -130,7 +258,7 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
              }
              </TableCell>
              <TableCell align="center">
-             <IconButton aria-label="edit" onClick={()=>openModal(true,row)}>
+             <IconButton aria-label="edit" onClick={()=>handleOpen(row)}>
                <EditIcon />
              </IconButton>
              <IconButton aria-label="delete" >
@@ -151,12 +279,16 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
      onChangePage={handleChangePage}
      onChangeRowsPerPage={handleChangeRowsPerPage}
    />
+
+
+
     </div>
   )}
 
   const mapDispatchToProps = dispatch => {
     return {
       getAllTools: () => dispatch(getAllTools()),
+      insertTools: (inputTools) => dispatch(insertTools(inputTools)),
       getAllCategory: () => dispatch(getAllCategory())
     }
   }
@@ -166,7 +298,7 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
       all_tools: state.all_tools,
       all_categorys: state.all_categorys
 
+    }
   }
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tools);
