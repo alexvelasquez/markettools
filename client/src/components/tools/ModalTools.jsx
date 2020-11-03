@@ -151,8 +151,6 @@ function ModalTools({ tools, open, onClose, onOpen, insertTools, getAllCategory,
                />
              </Grid>
              <Grid item sm={12} md={4}>
-
-
              <FormControl className={classes.formControl}>
         <NativeSelect
           defaultValue={tools.categoryId}

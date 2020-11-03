@@ -52,7 +52,7 @@ const reducer = (state = initialState, action) => {
       case UPDATE_TOOLS:
         return {
           ...state,
-        all_tools: [... state.alltools, action.payload]
+        all_tools: [...state.alltools, action.payload]
         };
         
       case LOGIN:

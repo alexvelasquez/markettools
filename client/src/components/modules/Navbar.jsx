@@ -19,11 +19,12 @@ import Divider from '@material-ui/core/Divider';
 import BuildIcon from '@material-ui/icons/Build';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
+import Avatar from '@material-ui/core/Avatar';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    background:'#CD4D44'
+    background:'#66CC66'
   },
   list: {
     width: 250,
@@ -91,6 +92,7 @@ export default function Header() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
         <Grid container spacing={3}>
+          
           <Grid item xs={2} >
           <Hidden mdUp>
             <IconButton
@@ -102,23 +104,42 @@ export default function Header() {
              >
                <MenuIcon display={{ xs: 'block', md: 'none', lg: 'none' }} />
              </IconButton>
-             <SwipeableDrawer
-             anchor='left'
-             open={openSidebar}
-             onClose={handleCloseSidebar}
-             onOpen={handleMenuSidebar}
-           >
-             {list()}
-           </SwipeableDrawer>
+             
           </Hidden>
           </Grid>
            <Grid item xs={8}>
-             <Typography align="center" variant="h6" noWrap >
-               GESTIÓN
-             </Typography>
+           <IconButton
+               edge="end"
+               aria-label="account of current user"
+               //aria-controls={menuId}
+               aria-haspopup="true"
+               //onClick={handleProfileMenuOpen}
+               color="inherit"
+             > 
+              <Avatar alt="Remy Sharp" src="https://i.postimg.cc/q7NTv10G/jdf.jpg" className={classes.large} />
+             </IconButton>              
            </Grid>
            <Grid item align="right" xs={2}>
            <div>
+             
+             <IconButton
+               edge="end"
+               aria-label="account of current user"
+               //aria-controls={menuId}
+               aria-haspopup="true"
+               //onClick={handleProfileMenuOpen}
+               color="inherit"
+             >                     
+               <Avatar className={classes.large} alt="Cindy Baker" src="https://cdn.iconscout.com/icon/free/png-512/laptop-user-1-1179329.png" /> 
+               &nbsp; <small style={{"color": "#000", "fontSize": "13px"}}>Welcome! <br/> 
+               <b>ADMIN</b>
+               </small>      
+             </IconButton>   
+             
+                    
+              
+           </div>
+           {/* <div>
              <IconButton
                aria-label="account of current user"
                aria-controls="menu-appbar"
@@ -146,7 +167,7 @@ export default function Header() {
                <MenuItem >Perfil</MenuItem>
                <MenuItem >Cerrar Sesion</MenuItem>
              </Menu>
-           </div>
+           </div> */}
            </Grid>
         </Grid>
         </Toolbar>

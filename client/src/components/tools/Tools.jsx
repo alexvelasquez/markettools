@@ -17,6 +17,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 
 // tables
@@ -33,7 +35,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { getAllTools, insertTools, getAllCategory } from '../../actions/index';
+import { getAllTools, insertTools, getAllCategory, updateTools } from '../../actions/index';
 import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
@@ -48,7 +50,7 @@ const useStyles = makeStyles({
   }
 });
 
-function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
+function Tools({ getAllTools, all_tools, getAllCategory, all_categorys, insertTools, updateTools }) {
   const classes = useStyles();
   const [tools, setTool] = React.useState({categoryId:null,
                                            createdAt:null,
@@ -88,12 +90,31 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
     setOpen(false)
   };
 
+   
+  
   const handleSubmit = function(e){
     e.preventDefault();
     alert()
-    // insertTools(tools);
-    // getAllTools();
-    // onClose(false);
+    if(tools.id){
+      let data = {
+        id: tools.id,
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        stock: document.getElementById('stock').value,
+        categoryId: document.getElementById('categoryId').value       
+                }
+      global.data = data
+      updateTools(data)
+      setOpen(false)
+      console.log('El DATA UPDATE ',data);
+
+    }else{      
+      insertTools(tools);
+      getAllTools();
+      setOpen(false)
+
+    }
+     
   }
 
 
@@ -107,6 +128,8 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
    });
   }
 
+  
+ 
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -194,7 +217,7 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
                      />
                    </Grid>
                    <Grid item sm={12} md={6}>
-                       <FormControl className={classes.formControl}>
+                       {/* <FormControl className={classes.formControl}>
                        <TextField
                         required
                          onChange={handleChangeTools}
@@ -212,7 +235,29 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
                            })
                          }
                          </TextField>
-                        </FormControl>
+                        </FormControl> */}
+                        <FormControl className={classes.formControl}>
+                        <NativeSelect
+                          defaultValue={tools.categoryId}
+                          className={classes.selectEmpty}
+                          inputProps={{ 'aria-label': 'age' }}
+                          id="categoryId"
+                        >
+                          
+                          <option value={tools.categoryId}>
+                          {all_categorys.map((nameCat)=>{
+                            return tools.categoryId === nameCat.id ? nameCat.name : null
+                          })
+                          }     
+                          </option>
+                          {all_categorys.map((cat)=>{
+                            return <option value={cat.id}>{cat.name}</option>
+                          })
+                          }
+                          
+                        </NativeSelect>
+        <FormHelperText>With visually hidden label</FormHelperText>
+      </FormControl>         
                    </Grid>
                 </Grid>
                 <DialogActions>
@@ -290,7 +335,8 @@ function Tools({ getAllTools, all_tools,getAllCategory, all_categorys }) {
     return {
       getAllTools: () => dispatch(getAllTools()),
       insertTools: (inputTools) => dispatch(insertTools(inputTools)),
-      getAllCategory: () => dispatch(getAllCategory())
+      getAllCategory: () => dispatch(getAllCategory()),
+      updateTools: (tools)=> dispatch(updateTools(tools)) 
     }
   }
 
