@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,9 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { login } from '../../actions/index';
+import { connect } from 'react-redux';
 
 function Copyright() {
   return (
@@ -57,10 +60,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+function SignInSide({ login }) {
   const classes = useStyles();
 
+  const [ userLog, setUserLog ] = useState({ username: "", password: "" })
+
+  const handleChange = function(e) {
+    setUserLog({
+    ...userLog,
+    [e.target.name]: e.target.value
+   });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    login(userLog)
+  }
+
   return (
+
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -70,17 +88,18 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Iniciar Sesion
           </Typography>
-          <form className={classes.form} noValidate>
+          <form onSubmit={handleSubmit} className={classes.form} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="USUARIO"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Usuario"
+              name="username"
+              autoComplete="username"
               autoFocus
+              onChange={handleChange}
             />
             <TextField
               variant="outlined"
@@ -88,10 +107,11 @@ export default function SignInSide() {
               required
               fullWidth
               name="password"
-              label="CLAVE"
+              label="Contraseña"
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handleChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -123,3 +143,17 @@ export default function SignInSide() {
     </Grid>
   );
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (userLog) => dispatch(login(userLog))
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    date_user: state.users
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInSide);
