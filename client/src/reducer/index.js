@@ -30,52 +30,61 @@ const reducer = (state = initialState, action) => {
         ...state,
         info_movie: action.payload,
       };
+
       case ALL_CLIENT:
       return {
         ...state,
         all_client: action.payload,
       };
+
       case GET_ALL_TOOLS:
       return {
         ...state,
         all_tools: action.payload,
       };
+
       case GET_ALL_CATEGORY:
       return {
         ...state,
         all_categorys: action.payload,
       };
+
       case INSERT_TOOLS:
       return {
         ...state, 
         all_tools:  [...state.all_tools, action.payload] //Usar esto para actualizar el estado
       };
+
       case UPDATE_TOOLS:
-        return {
-          ...state,
-        all_tools: [...state.alltools, action.payload]
-        };
-        
+      return {
+        ...state,
+      all_tools: [...state.alltools, action.payload]
+      };
+
       case LOGIN:
       return {
         ...state,
         users: action.payload,
       };
+
       case INSERT_CLIENT:
       return {
         ...state, 
-        all_client:  [...state.all_client, action.payload] //Usar esto para actualizar el estado
+        all_client: [...state.all_client, action.payload] //Usar esto para actualizar el estado
       };
+
       case UPDATE_CLIENT:
       return {
         ...state, 
-        all_client:  [...state.all_client, action.payload] //Usar esto para modificar el estado
+        all_client: [...state.all_client, action.payload] //Usar esto para modificar el estado
       };
-      case DELETE_CLIENT:
+
+      case  DELETE_CLIENT: 
       return {
-        ...state, 
-        all_client:  [...state.all_client, action.payload] //Usar esto para borrar el estado
-      };
+      ...state,
+      users: [...state.users.filter(user => user.id !== action.payload)]
+      }
+
     default:
       return state;
   }
