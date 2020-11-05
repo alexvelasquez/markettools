@@ -14,6 +14,7 @@ export const GET_ALL_CATEGORY = "GET_ALL_CATEGORY";
 export const INSERT_CLIENT = "INSERT_CLIENT";
 export const UPDATE_TOOLS = "UPDATE_TOOLS";
 export const UPDATE_CLIENT = "UPDATE_CLIENT"
+export const DELETE_CLIENT = "DELETE_CLIENT"
 
 
 // export function infoMovie (apiKey, ciudad ) {
@@ -174,18 +175,32 @@ export function updateTools(date) {
   }
 }
 
-// ////////////////// ESTO ES DE FACU ////////////
-// export function updateClient(client) {
-//   console.log("El updateClient llega", client)
-//   return function(dispatch) {
-//   return axios.post(`http://localhost:3005/clients/updateClient/${client.id}`, client)
-//     .then(result => result.data)
-//     .then(data => {
-//       dispatch({
-//         type: UPDATE_CLIENT,
-//         payload: data
-//       })
-//       console.log("El updateClient devuelve", data)
-//     })
-//   }
-// }
+export function updateClient(client) {
+  console.log("El updateClient llega", client)
+  return function(dispatch) {
+  return axios.post(`http://localhost:3005/clients/updateClient/${client.id}`, client)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: UPDATE_CLIENT,
+        payload: data
+      })
+      console.log("El updateClient devuelve", data)
+    })
+  }
+}
+
+export function deleteClient(client) {
+  console.log("El deleteClient llega", client)
+  return function(dispatch) {
+  return axios.post(`http://localhost:3005/clients/delete/${client.id}`, client)
+    .then(result => result.data)
+    .then(data => {
+      dispatch({
+        type: DELETE_CLIENT,
+        payload: data
+      })
+      console.log("El deleteClient devuelve", data)
+    })
+  }
+}

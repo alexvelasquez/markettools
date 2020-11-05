@@ -25,7 +25,6 @@ server.get('/search', (req, res) => {
 	.catch(err => console.log(err))
 })
 
-
 server.post('/register', (req, res) => {
 	Client.create(req.body.data)
 	.then(data => res.send(data))
@@ -48,7 +47,7 @@ server.put('/updateClient/:id', (req, res) => {
 	})
 })
 
-server.delete('/deleteClient/:id', (req, res) => {
+server.delete('/delete/:id', (req, res) => {
 	Client.findOne({
 		where: {
 			id: req.params.id
@@ -60,7 +59,6 @@ server.delete('/deleteClient/:id', (req, res) => {
 	})
 	.catch(err => console.log(err))
 })
-
 
 
 module.exports = server;

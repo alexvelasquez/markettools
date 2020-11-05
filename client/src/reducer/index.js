@@ -9,7 +9,8 @@ import {
     LOGIN,
     INSERT_CLIENT,
     UPDATE_TOOLS,
-    UPDATE_CLIENT
+    UPDATE_CLIENT,
+    DELETE_CLIENT
     //INSERT_CATEGORY
 } from "../actions/index";
 
@@ -69,6 +70,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state, 
         all_client:  [...state.all_client, action.payload] //Usar esto para modificar el estado
+      };
+      case DELETE_CLIENT:
+      return {
+        ...state, 
+        all_client:  [...state.all_client, action.payload] //Usar esto para borrar el estado
       };
     default:
       return state;
